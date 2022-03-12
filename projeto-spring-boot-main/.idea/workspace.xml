@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a8be9931-5cad-4096-ae2b-348da77163a2" name="Default Changelist" comment="Melhorias">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/reports/ProviderReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/reports/ProviderReport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/security/JwtTokenUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/security/JwtTokenUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/UserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/UserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/ReportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/ReportController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/domain/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/domain/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/reports/ProviderReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/reports/ProviderReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JWTAuthenticationResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JWTAuthorizationFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JWTFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JWTFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JwtTokenUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/security/JwtTokenUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/service/UserDetailsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/service/UserDetailsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/demo-0.0.1-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/demo-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/surefire-reports/TEST-com.example.demo.DemoApplicationTests.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/surefire-reports/com.example.demo.DemoApplicationTests.txt" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="GroovyConsoleState">
+    <option name="list">
+      <list>
+        <Entry>
+          <option name="moduleName" value="demo" />
+          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
+        </Entry>
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="outputLevel" value="DEBUG" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1uBo40lbL47hauLKEVItVxsGSc2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Groovy.Last.Module.Chosen" value="demo" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../projeto-angular/backend" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.proportion" value="0.17666666" />
+    <property name="project.structure.side.proportion" value="0.4972973" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.splitter.proportion" value="0.21014492" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.demo.relatorios" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Vitor\Desktop\Everthing\demo\demo\src\main\resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.demo" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.demo.service.execptions" />
+      <recent name="com.example.demo.service.interfaces" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="projeto-pessoal" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="demo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.demo.DemoApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a8be9931-5cad-4096-ae2b-348da77163a2" name="Default Changelist" comment="" />
+      <created>1624148150847</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1624148150847</updated>
+      <workItem from="1624148152352" duration="7847000" />
+      <workItem from="1624201000013" duration="24721000" />
+      <workItem from="1624243060407" duration="5942000" />
+      <workItem from="1624305874839" duration="13314000" />
+      <workItem from="1624387687367" duration="1530000" />
+      <workItem from="1624389765408" duration="420000" />
+      <workItem from="1624393112727" duration="2382000" />
+      <workItem from="1624399260670" duration="2458000" />
+      <workItem from="1624411918627" duration="1336000" />
+      <workItem from="1624494098346" duration="1683000" />
+      <workItem from="1624496686721" duration="4600000" />
+      <workItem from="1624583853909" duration="3216000" />
+      <workItem from="1624729898357" duration="1398000" />
+      <workItem from="1624807012469" duration="11761000" />
+      <workItem from="1624845206015" duration="1428000" />
+      <workItem from="1624915493030" duration="4738000" />
+      <workItem from="1624928843124" duration="7000" />
+      <workItem from="1625011983317" duration="2073000" />
+      <workItem from="1625094969646" duration="1870000" />
+      <workItem from="1625098890210" duration="1609000" />
+      <workItem from="1625191958079" duration="594000" />
+      <workItem from="1625319460310" duration="1448000" />
+      <workItem from="1625359967968" duration="594000" />
+      <workItem from="1625414541700" duration="2294000" />
+      <workItem from="1625438346150" duration="1298000" />
+      <workItem from="1625617089268" duration="784000" />
+      <workItem from="1625698475753" duration="592000" />
+      <workItem from="1625873511642" duration="632000" />
+      <workItem from="1625874172284" duration="492000" />
+      <workItem from="1625874724857" duration="4269000" />
+      <workItem from="1626024636854" duration="1185000" />
+      <workItem from="1626127384965" duration="225000" />
+      <workItem from="1626631196120" duration="9086000" />
+      <workItem from="1626733480853" duration="6787000" />
+      <workItem from="1626831177144" duration="1840000" />
+      <workItem from="1626915094639" duration="1599000" />
+      <workItem from="1626990379721" duration="3253000" />
+      <workItem from="1627075099527" duration="1341000" />
+      <workItem from="1627150758173" duration="1959000" />
+      <workItem from="1627222897802" duration="591000" />
+      <workItem from="1627264510636" duration="1638000" />
+      <workItem from="1627341383195" duration="594000" />
+      <workItem from="1627428601806" duration="659000" />
+      <workItem from="1627508158180" duration="8061000" />
+      <workItem from="1627598607309" duration="3100000" />
+      <workItem from="1627695905628" duration="595000" />
+      <workItem from="1627946681718" duration="1274000" />
+      <workItem from="1628207193697" duration="2176000" />
+      <workItem from="1628378364038" duration="3679000" />
+      <workItem from="1628442432629" duration="2529000" />
+      <workItem from="1628553102494" duration="2880000" />
+      <workItem from="1628644555131" duration="594000" />
+      <workItem from="1628901040933" duration="1656000" />
+      <workItem from="1628904252330" duration="593000" />
+      <workItem from="1628989128528" duration="2387000" />
+      <workItem from="1629066264300" duration="1391000" />
+      <workItem from="1629154275483" duration="2123000" />
+      <workItem from="1629852685042" duration="681000" />
+      <workItem from="1629933547194" duration="2761000" />
+      <workItem from="1630023057466" duration="599000" />
+      <workItem from="1630106112004" duration="4185000" />
+      <workItem from="1630458930842" duration="902000" />
+      <workItem from="1630717149202" duration="756000" />
+      <workItem from="1630881280434" duration="584000" />
+      <workItem from="1631370736562" duration="2104000" />
+      <workItem from="1631752556990" duration="2537000" />
+      <workItem from="1631920159235" duration="3305000" />
+      <workItem from="1632003584625" duration="979000" />
+      <workItem from="1632009310147" duration="8512000" />
+      <workItem from="1632178840614" duration="93000" />
+      <workItem from="1632178975896" duration="133000" />
+      <workItem from="1632351627982" duration="2889000" />
+      <workItem from="1632362938919" duration="2115000" />
+      <workItem from="1632437355619" duration="3100000" />
+      <workItem from="1632532846866" duration="716000" />
+      <workItem from="1632576971295" duration="1403000" />
+      <workItem from="1632666428360" duration="4514000" />
+      <workItem from="1632790178683" duration="4550000" />
+      <workItem from="1632874733907" duration="1804000" />
+      <workItem from="1633388161967" duration="1728000" />
+      <workItem from="1633997967871" duration="5000" />
+      <workItem from="1635808746028" duration="131000" />
+      <workItem from="1635809473589" duration="624000" />
+      <workItem from="1635897430476" duration="7000" />
+      <workItem from="1636320912106" duration="315000" />
+      <workItem from="1636321289546" duration="34000" />
+      <workItem from="1636414512670" duration="1822000" />
+      <workItem from="1636418037541" duration="5225000" />
+      <workItem from="1636500900255" duration="1829000" />
+      <workItem from="1637523649003" duration="740000" />
+      <workItem from="1637885690371" duration="1250000" />
+      <workItem from="1638041020961" duration="2176000" />
+      <workItem from="1638063695744" duration="12000" />
+      <workItem from="1638109465716" duration="1434000" />
+      <workItem from="1638488162672" duration="4815000" />
+      <workItem from="1638576617299" duration="477000" />
+      <workItem from="1638736923616" duration="3125000" />
+      <workItem from="1638830729994" duration="1807000" />
+      <workItem from="1639013402441" duration="595000" />
+      <workItem from="1640286464608" duration="2625000" />
+      <workItem from="1640312868173" duration="594000" />
+      <workItem from="1643424987504" duration="609000" />
+      <workItem from="1643837769966" duration="13000" />
+      <workItem from="1643850403403" duration="2528000" />
+      <workItem from="1643930069042" duration="1546000" />
+      <workItem from="1644024081688" duration="2227000" />
+      <workItem from="1644093535191" duration="2698000" />
+      <workItem from="1644158140942" duration="320000" />
+      <workItem from="1644180263494" duration="594000" />
+      <workItem from="1644181715798" duration="1268000" />
+      <workItem from="1644183029167" duration="5838000" />
+      <workItem from="1644190384875" duration="5422000" />
+      <workItem from="1644197246434" duration="80000" />
+      <workItem from="1644197778122" duration="1926000" />
+      <workItem from="1644275589397" duration="4419000" />
+      <workItem from="1644359062533" duration="1364000" />
+      <workItem from="1644449317750" duration="4622000" />
+      <workItem from="1644544577619" duration="592000" />
+      <workItem from="1644615654530" duration="3767000" />
+      <workItem from="1644623803379" duration="1063000" />
+      <workItem from="1644625103204" duration="3448000" />
+      <workItem from="1644633899597" duration="1478000" />
+      <workItem from="1644669479697" duration="9000000" />
+      <workItem from="1644702327556" duration="1950000" />
+      <workItem from="1644704321429" duration="5932000" />
+      <workItem from="1644758154194" duration="4420000" />
+      <workItem from="1644774337735" duration="4402000" />
+      <workItem from="1644784644584" duration="5650000" />
+      <workItem from="1644960314264" duration="1840000" />
+      <workItem from="1645046517836" duration="4977000" />
+      <workItem from="1645056328298" duration="6712000" />
+      <workItem from="1645133933994" duration="2228000" />
+      <workItem from="1645142452846" duration="4627000" />
+      <workItem from="1645222666760" duration="1203000" />
+      <workItem from="1645226807947" duration="663000" />
+      <workItem from="1645283206112" duration="6381000" />
+      <workItem from="1645307171898" duration="4499000" />
+      <workItem from="1645369103539" duration="1758000" />
+      <workItem from="1645401558182" duration="4768000" />
+      <workItem from="1645479414871" duration="2466000" />
+      <workItem from="1645482283835" duration="1678000" />
+      <workItem from="1645565571700" duration="1194000" />
+      <workItem from="1645581158465" duration="609000" />
+      <workItem from="1645652499738" duration="5454000" />
+      <workItem from="1645738339218" duration="2287000" />
+      <workItem from="1645751945483" duration="3968000" />
+      <workItem from="1645838809402" duration="294000" />
+      <workItem from="1645903634081" duration="2673000" />
+      <workItem from="1645907775176" duration="4628000" />
+      <workItem from="1645923876511" duration="3121000" />
+      <workItem from="1645960450170" duration="1292000" />
+      <workItem from="1646059154682" duration="12864000" />
+    </task>
+    <task id="LOCAL-00001" summary="Melhorias">
+      <created>1632797017360</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632797017360</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Melhorias" />
+    <option name="LAST_COMMIT_MESSAGE" value="Melhorias" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/projeto_spring_boot$projeto_pessoal.ic" NAME="projeto-pessoal Coverage Results" MODIFIED="1645306057906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

@@ -1,0 +1,184 @@
+<p-panel header="Task Panel">
+    <p-toast></p-toast>
+
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <p-button label="New" icon="pi pi-plus" (click)="opewNewTask()"></p-button>
+        </div>
+        <div class="p-toolbar-group-right"></div>
+    </p-toolbar>
+
+    <div class="grid mt-1">
+        <div class="col">
+            <p-table [value]="tasksToDo" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr >
+                        <th>To Do</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task>
+                    <tr (dblclick)="openTask(task)">
+                        <td>
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex align-items-center justify-content-center">
+                                    {{ task.name }}
+                                </div>
+                                <div class="flex align-items-center justify-content-center w-4rem">
+                                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngClass]="changeBackground(task.priority)" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                        <i class="pi pi-list text-blue-500 text-xl" [ngClass]="changeColorOfIcon(task.priority)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="1">Empty</td>
+					</tr>
+				</ng-template>
+            </p-table>
+        </div>
+        <div class="col">
+            <p-table [value]="taskDoing" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Doing</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task>
+                    <tr (dblclick)="openTask(task)">
+                        <td>
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex align-items-center justify-content-center">
+                                    {{ task.name }}
+                                </div>
+                                <div class="flex align-items-center justify-content-center w-4rem">
+                                    <div class="flex align-items-center justify-content-center border-round" [ngClass]="changeBackground(task.priority)" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                        <i class="pi pi-list text-xl" [ngClass]="changeColorOfIcon(task.priority)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="1">Empty</td>
+					</tr>
+				</ng-template>
+            </p-table>
+        </div>
+        <div class="col">
+            <p-table [value]="taskDone" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Done</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task>
+                    <tr (dblclick)="openTask(task)">
+                        <td>
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex align-items-center justify-content-center">
+                                    {{ task.name }}
+                                </div>
+                                <div class="flex align-items-center justify-content-center w-4rem">
+                                    <div class="flex align-items-center justify-content-center border-round" [ngClass]="changeBackground(task.priority)" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                        <i class="pi pi-list text-xl" [ngClass]="changeColorOfIcon(task.priority)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="1">Empty</td>
+					</tr>
+				</ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-panel>
+
+<p-dialog [(visible)]="openDialog" [style]="{width: '555px'}" header="Task" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label for="name">Name</label>
+                <input name="name" type="text" pInputText id="name" [(ngModel)]="task.name" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !task.name}"/>
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !task.name">Name is required.</small>
+            </div>
+            <div class="field col-6">
+                <label for="situation">Situation</label>
+                <p-dropdown name="situation" [options]="enumSituation" optionValue="code" optionLabel="label" [(ngModel)]="task.situation" appendTo="body"></p-dropdown>
+            </div>
+            <div class="field col-6">
+                <label for="priority">Priority</label>
+                <p-dropdown name="priority" [options]="enumPriority" optionValue="code" [(ngModel)]="task.priority" appendTo="body">
+                    <ng-template let-itens pTemplate="selectedItem">
+                        <div class="flex justify-content-between flex-wrap">
+                            <div class="flex align-items-center justify-content-center">
+                                {{itens.label}}
+                            </div>
+                            <div class="flex align-items-center justify-content-center w-4rem">
+                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngClass]="changeBackground(itens.label)" [ngStyle]="{width: '1.0rem', height: '1.0rem'}">
+                                    <i class="pi pi-list text-xl" [ngStyle]="{width: '1.0rem', height: '1.0rem'}" [ngClass]="changeColorOfIcon(itens.label)"></i>
+                                </div>
+                            </div>
+                        </div>
+                   </ng-template>
+                   <ng-template let-itens pTemplate="item">
+                        <div class="flex justify-content-between flex-wrap">
+                            <div class="flex align-items-center justify-content-center">
+                                {{itens.label}}
+                            </div>
+                            <div class="flex align-items-center justify-content-center w-4rem">
+                                <div class="flex align-items-center justify-content-center border-round" [ngClass]="changeBackground(itens.label)" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                    <i class="pi pi-list text-xl" [ngClass]="changeColorOfIcon(itens.label)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="field col-6">
+                <label for="priority">Inicial Date</label>
+                <p-calendar [(ngModel)]="task.inicialDate" [locale]="es" dateFormat="dd/mm/yy" inputId="spanish"></p-calendar>
+
+            </div>
+            <div class="field col-6">
+                <label for="priority">End Date</label>
+                <p-calendar [(ngModel)]="task.endDate"></p-calendar>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-text" (click)="deleteDialog = true"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="task">Are you sure you want to delete this task ?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="delete()"></button>
+    </ng-template>
+</p-dialog>
+
+        <!-- <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+</p-dialog> -->

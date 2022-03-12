@@ -1,0 +1,28 @@
+<p-panel header="Provider Report">
+    <div class="p-fluid">
+        <div class="field">
+            <label>Provider</label>
+            <p-dropdown
+                id="providers"
+                name="providers"
+                [options]="providers"
+                [(ngModel)]="selectProvider"
+                optionLabel="name"
+                placeholder="Select"
+                [showClear]="true"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-center">
+            <button
+                pButton
+                class="p-button-sm"
+                icon="pi pi-print"
+                label="Print"
+                (click)="print()"
+            ></button>
+        </div>
+    </ng-template>
+</p-panel>

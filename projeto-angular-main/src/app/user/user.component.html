@@ -1,0 +1,43 @@
+<p-panel header="User">
+    <p-toast></p-toast>
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label for="name">Name</label>
+                <input name="name" type="text" pInputText id="name" [(ngModel)]="task.name" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !task.name}"/>
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !task.name">Name is required.</small>
+            </div>
+            <div class="field col-6">
+                <label for="situation">Situation</label>
+                <p-dropdown name="situation" [options]="enumSituation" optionValue="code" optionLabel="label" [(ngModel)]="task.situation" appendTo="body"></p-dropdown>
+            </div>
+            <div class="field col-6">
+                <label for="priority">Priority</label>
+                <p-dropdown name="priority" [options]="enumPriority" optionValue="code" [(ngModel)]="task.priority" appendTo="body">
+                    <ng-template let-itens pTemplate="selectedItem">
+                        <div class="flex justify-content-between flex-wrap">
+                            <div class="flex align-items-center justify-content-center">
+                                {{itens.label}}
+                            </div>
+                            <div class="flex align-items-center justify-content-center w-4rem">
+                                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngClass]="changeBackground(itens.label)" [ngStyle]="{width: '1.0rem', height: '1.0rem'}">
+                                    <i class="pi pi-list text-xl" [ngStyle]="{width: '1.0rem', height: '1.0rem'}" [ngClass]="changeColorOfIcon(itens.label)"></i>
+                                </div>
+                            </div>
+                        </div>
+                   </ng-template>
+                   <ng-template let-itens pTemplate="item">
+                        <div class="flex justify-content-between flex-wrap">
+                            <div class="flex align-items-center justify-content-center">
+                                {{itens.label}}
+                            </div>
+                            <div class="flex align-items-center justify-content-center w-4rem">
+                                <div class="flex align-items-center justify-content-center border-round" [ngClass]="changeBackground(itens.label)" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                                    <i class="pi pi-list text-xl" [ngClass]="changeColorOfIcon(itens.label)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+        </div>
+</p-panel>

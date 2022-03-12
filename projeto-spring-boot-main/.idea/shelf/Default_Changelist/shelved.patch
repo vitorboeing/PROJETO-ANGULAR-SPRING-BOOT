@@ -1,0 +1,2552 @@
+Index: demo/src/main/java/com/example/demo/domain/PagamentoComBoleto.java
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/PagamentoComBoleto.java b/demo/src/main/java/com/example/demo/domain/PagamentoComBoleto.java
+deleted file mode 100644
+--- a/demo/src/main/java/com/example/demo/domain/PagamentoComBoleto.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ /dev/null	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
+@@ -1,43 +0,0 @@
+-package com.example.demo.domain;
+-
+-import com.example.demo.domain.enums.EstadoPagamento;
+-import com.fasterxml.jackson.annotation.JsonFormat;
+-
+-import javax.persistence.Entity;
+-import java.util.Date;
+-
+-@Entity
+-public class PagamentoComBoleto extends Pagamento {
+-
+-    private static final long serialVersionUID = 1L;
+-
+-    @JsonFormat(pattern = "dd/MM/yyyy")
+-    private Date dataVencimento;
+-
+-    @JsonFormat(pattern = "dd/MM/yyyy")
+-    private Date dataPagamento;
+-
+-    public PagamentoComBoleto(){}
+-
+-    public PagamentoComBoleto(Long id, EstadoPagamento estado, Pedido pedido, Date dataVencimento, Date dataPagamento) {
+-        super(id, estado, pedido);
+-        this.dataVencimento = dataVencimento;
+-        this.dataPagamento = dataPagamento;
+-    }
+-
+-    public Date getDataVencimento() {
+-        return dataVencimento;
+-    }
+-
+-    public void setDataVencimento(Date dataVencimento) {
+-        this.dataVencimento = dataVencimento;
+-    }
+-
+-    public Date getDataPagamento() {
+-        return dataPagamento;
+-    }
+-
+-    public void setDataPagamento(Date dataPagamento) {
+-        this.dataPagamento = dataPagamento;
+-    }
+-}
+Index: demo/src/main/java/com/example/demo/domain/PagamentoComCartao.java
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/PagamentoComCartao.java b/demo/src/main/java/com/example/demo/domain/PagamentoComCartao.java
+deleted file mode 100644
+--- a/demo/src/main/java/com/example/demo/domain/PagamentoComCartao.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ /dev/null	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
+@@ -1,32 +0,0 @@
+-package com.example.demo.domain;
+-
+-import com.example.demo.domain.enums.EstadoPagamento;
+-
+-import javax.persistence.Entity;
+-
+-@Entity
+-public class PagamentoComCartao extends Pagamento{
+-
+-    private static final long serialVersionUID = 1L;
+-
+-    private Integer numeroDeParcelas;
+-
+-    public PagamentoComCartao(){}
+-
+-    public PagamentoComCartao(Long id, EstadoPagamento estado, Pedido pedido, Integer numeroDeParcelas) {
+-        super(id, estado, pedido);
+-        this.numeroDeParcelas = numeroDeParcelas;
+-    }
+-
+-
+-    public Integer getNumeroDeParcelas() {
+-        return numeroDeParcelas;
+-    }
+-
+-    public void setNumeroDeParcelas(Integer numeroDeParcelas) {
+-        this.numeroDeParcelas = numeroDeParcelas;
+-    }
+-
+-
+-
+-}
+Index: demo/src/main/java/com/example/demo/security/JWTAuthorizationFilter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.security;\r\n\r\nimport org.springframework.security.authentication.AuthenticationManager;\r\nimport org.springframework.security.authentication.UsernamePasswordAuthenticationToken;\r\nimport org.springframework.security.core.context.SecurityContextHolder;\r\nimport org.springframework.security.core.userdetails.UserDetails;\r\nimport org.springframework.security.core.userdetails.UserDetailsService;\r\nimport org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\r\nimport org.springframework.security.web.authentication.www.BasicAuthenticationFilter;\r\n\r\nimport javax.servlet.FilterChain;\r\nimport javax.servlet.ServletException;\r\nimport javax.servlet.http.HttpServletRequest;\r\nimport javax.servlet.http.HttpServletResponse;\r\nimport java.io.IOException;\r\n\r\npublic class JWTAuthorizationFilter extends BasicAuthenticationFilter {\r\n\r\n    private JWTUtil jwtUtil;\r\n\r\n    private UserDetailsService userDetailsService;\r\n\r\n    public JWTAuthorizationFilter(AuthenticationManager authenticationManager , JWTUtil jwtUtil , UserDetailsService userDetailsService) {\r\n        super(authenticationManager);\r\n        this.jwtUtil = jwtUtil;\r\n        this.userDetailsService = userDetailsService;\r\n    }\r\n\r\n    @Override\r\n    protected void doFilterInternal(HttpServletRequest request , HttpServletResponse response, FilterChain chain) throws IOException , ServletException{\r\n\r\n      String header =   request.getHeader(\"Authorization\");\r\n\r\n      if(header != null && header.startsWith(\"Bearer\")){\r\n          UsernamePasswordAuthenticationToken auth = getAuthentication( header.substring(7));\r\n          if (auth != null){\r\n            SecurityContextHolder.getContext().setAuthentication(auth);\r\n          }\r\n      }\r\n      chain.doFilter(request , response);\r\n    }\r\n\r\n    private UsernamePasswordAuthenticationToken getAuthentication(String token) {\r\n        if(jwtUtil.tokenValido(token)){\r\n            String username = jwtUtil.getUsername(token);\r\n            UserDetails user = userDetailsService.loadUserByUsername(username);\r\n            return new UsernamePasswordAuthenticationToken( user , null , user.getAuthorities());\r\n        }\r\n        return null;\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/security/JWTAuthorizationFilter.java b/demo/src/main/java/com/example/demo/security/JWTAuthorizationFilter.java
+--- a/demo/src/main/java/com/example/demo/security/JWTAuthorizationFilter.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/security/JWTAuthorizationFilter.java	(date 1627600159623)
+@@ -29,7 +29,7 @@
+     @Override
+     protected void doFilterInternal(HttpServletRequest request , HttpServletResponse response, FilterChain chain) throws IOException , ServletException{
+ 
+-      String header =   request.getHeader("Authorization");
++      String header = request.getHeader("Authorization");
+ 
+       if(header != null && header.startsWith("Bearer")){
+           UsernamePasswordAuthenticationToken auth = getAuthentication( header.substring(7));
+Index: demo/src/main/java/com/example/demo/service/ProdutoService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.service;\r\n\r\nimport com.example.demo.domain.Produto;\r\nimport com.example.demo.repositories.CategoriaRepository;\r\nimport com.example.demo.repositories.ProdutoRepository;\r\nimport com.example.demo.service.execptions.ObjectNotFoundException;\r\nimport com.example.demo.service.interfaces.Crud;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n@Service\r\npublic class ProdutoService implements Crud {\r\n\r\n    @Autowired\r\n    private ProdutoRepository produtoRepository;\r\n\r\n    @Autowired\r\n    private CategoriaRepository categoriaRepository;\r\n\r\n    public Produto find(Long id) {\r\n        Optional<Produto> obj = produtoRepository.findById(id);\r\n        return obj.orElseThrow(() -> new ObjectNotFoundException(\r\n                \"Objeto não encontrado! Id: \" + id + \", Tipo: \" + Produto.class.getName()));\r\n    }\r\n\r\n    @Override\r\n    public List findAll() {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public Object findByID(Object o) {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public Object save(Object entity) {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public Object update(Object entity) {\r\n        return null;\r\n    }\r\n\r\n    @Override\r\n    public void delete(Object o) {\r\n\r\n    }\r\n\r\n//    public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy, String direction) {\r\n//        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);\r\n//        List<Categoria> categorias = categoriaRepository.findAllById(ids);\r\n//        return produtoRepository.findDistinctByNomeContainingAndCategoriasIn(nome, categorias, pageRequest);\r\n//    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/service/ProdutoService.java b/demo/src/main/java/com/example/demo/service/ProdutoService.java
+--- a/demo/src/main/java/com/example/demo/service/ProdutoService.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/service/ProdutoService.java	(date 1632671339034)
+@@ -12,7 +12,7 @@
+ import java.util.Optional;
+ 
+ @Service
+-public class ProdutoService implements Crud {
++public class ProdutoService implements Crud<Long , ProdutoRepository> {
+ 
+     @Autowired
+     private ProdutoRepository produtoRepository;
+@@ -32,22 +32,22 @@
+     }
+ 
+     @Override
+-    public Object findByID(Object o) {
++    public ProdutoRepository findByID(Long aLong) {
+         return null;
+     }
+ 
+     @Override
+-    public Object save(Object entity) {
++    public ProdutoRepository save(ProdutoRepository entity) {
+         return null;
+     }
+ 
+     @Override
+-    public Object update(Object entity) {
++    public ProdutoRepository update(ProdutoRepository entity) {
+         return null;
+     }
+ 
+     @Override
+-    public void delete(Object o) {
++    public void delete(Long aLong) {
+ 
+     }
+ 
+Index: demo/src/main/java/com/example/demo/security/JWTAuthenticationFilter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.security;\r\n\r\nimport com.example.demo.dto.CredenciaisDTO;\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport org.springframework.security.core.Authentication;\r\nimport org.springframework.security.authentication.AuthenticationManager;\r\nimport org.springframework.security.authentication.UsernamePasswordAuthenticationToken;\r\nimport org.springframework.security.web.authentication.AuthenticationFailureHandler;\r\nimport org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\r\n\r\nimport javax.naming.AuthenticationException;\r\nimport javax.servlet.FilterChain;\r\nimport javax.servlet.ServletException;\r\nimport javax.servlet.http.HttpServletRequest;\r\nimport javax.servlet.http.HttpServletResponse;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.Date;\r\n\r\npublic class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {\r\n\r\n    private AuthenticationManager authenticationManager;\r\n\r\n    private JWTUtil jwtUtil;\r\n\r\n    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {\r\n        setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());\r\n        this.authenticationManager = authenticationManager;\r\n        this.jwtUtil = jwtUtil;\r\n    }\r\n\r\n    @Override\r\n    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {\r\n\r\n        try {\r\n            CredenciaisDTO creds = new ObjectMapper()\r\n                    .readValue(req.getInputStream(), CredenciaisDTO.class);\r\n\r\n            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getSenha(), new ArrayList<>());\r\n\r\n           Authentication auth = authenticationManager.authenticate(authToken);\r\n\r\n            return auth;\r\n        }\r\n        catch (IOException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void successfulAuthentication(HttpServletRequest req,\r\n                                            HttpServletResponse res,\r\n                                            FilterChain chain,\r\n                                            Authentication auth) throws IOException, ServletException {\r\n\r\n        String username = ((UserSS) auth.getPrincipal()).getUsername();\r\n        String token = jwtUtil.generateToken(username);\r\n        res.addHeader(\"Authorization\", \"Bearer \" + token);\r\n    }\r\n\r\n    private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {\r\n\r\n        @Override\r\n        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException e) throws IOException, ServletException {\r\n            response.setContentType(\"application/json\");\r\n            response.getWriter().append(json());\r\n        }\r\n\r\n        private String json() {\r\n            long date = new Date().getTime();\r\n            return \"{\\\"timestamp\\\": \" + date + \", \"\r\n                    + \"\\\"status\\\": 401, \"\r\n                    + \"\\\"error\\\": \\\"Não autorizado\\\", \"\r\n                    + \"\\\"message\\\": \\\"Email ou senha inválidos\\\", \"\r\n                    + \"\\\"path\\\": \\\"/login\\\"}\";\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/security/JWTAuthenticationFilter.java b/demo/src/main/java/com/example/demo/security/JWTAuthenticationFilter.java
+--- a/demo/src/main/java/com/example/demo/security/JWTAuthenticationFilter.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/security/JWTAuthenticationFilter.java	(date 1632670245670)
+@@ -1,21 +1,23 @@
+ package com.example.demo.security;
+ 
+-import com.example.demo.dto.CredenciaisDTO;
+-import com.fasterxml.jackson.databind.ObjectMapper;
+-import org.springframework.security.core.Authentication;
+-import org.springframework.security.authentication.AuthenticationManager;
+-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
++import java.io.IOException;
++import java.util.ArrayList;
++import java.util.Date;
+ 
+-import javax.naming.AuthenticationException;
+ import javax.servlet.FilterChain;
+ import javax.servlet.ServletException;
+ import javax.servlet.http.HttpServletRequest;
+ import javax.servlet.http.HttpServletResponse;
+-import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.Date;
++
++import com.example.demo.domain.dto.CredenciaisDTO;
++import org.springframework.security.authentication.AuthenticationManager;
++import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++import org.springframework.security.core.Authentication;
++import org.springframework.security.core.AuthenticationException;
++import org.springframework.security.web.authentication.AuthenticationFailureHandler;
++import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
++
++import com.fasterxml.jackson.databind.ObjectMapper;
+ 
+ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+ 
+@@ -30,7 +32,8 @@
+     }
+ 
+     @Override
+-    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
++    public Authentication attemptAuthentication(HttpServletRequest req,
++                                                HttpServletResponse res) throws AuthenticationException {
+ 
+         try {
+             CredenciaisDTO creds = new ObjectMapper()
+@@ -38,9 +41,7 @@
+ 
+             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getSenha(), new ArrayList<>());
+ 
+-           Authentication auth = authenticationManager.authenticate(authToken);
+-
+-            return auth;
++            return authenticationManager.authenticate(authToken);
+         }
+         catch (IOException e) {
+             throw new RuntimeException(e);
+@@ -56,12 +57,15 @@
+         String username = ((UserSS) auth.getPrincipal()).getUsername();
+         String token = jwtUtil.generateToken(username);
+         res.addHeader("Authorization", "Bearer " + token);
++        res.addHeader("access-control-expose-headers", "Authorization");
+     }
+ 
+     private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+ 
+         @Override
+-        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException e) throws IOException, ServletException {
++        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
++                throws IOException, ServletException {
++            response.setStatus(401);
+             response.setContentType("application/json");
+             response.getWriter().append(json());
+         }
+Index: demo/src/main/java/com/example/demo/security/JWTUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.security;\r\n\r\n\r\nimport io.jsonwebtoken.Claims;\r\nimport io.jsonwebtoken.Jwts;\r\nimport io.jsonwebtoken.SignatureAlgorithm;\r\nimport org.springframework.beans.factory.annotation.Value;\r\nimport org.springframework.stereotype.Component;\r\n\r\nimport java.util.Date;\r\n\r\n@Component\r\npublic class JWTUtil {\r\n\r\n    @Value(\"${jwt.secret}\")\r\n    private String secret;\r\n\r\n    @Value(\"${jwt.expiration}\")\r\n    private Long expiration;\r\n\r\n    public String generateToken(String username) {\r\n        return Jwts.builder().setSubject(username).setExpiration(new Date(System.currentTimeMillis() + expiration))\r\n                .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();\r\n    }\r\n\r\n    public boolean tokenValido(String token) {\r\n        Claims claims = getClaims(token);\r\n        if (claims != null) {\r\n            String username = claims.getSubject();\r\n            Date expirationDate = claims.getExpiration();\r\n            Date now = new Date(System.currentTimeMillis());\r\n            if (username != null && expirationDate != null && now.before(expirationDate)) {\r\n                return true;\r\n            }\r\n        }\r\n    return false;\r\n    }\r\n\r\n    public String getUsername(String token) {\r\n        Claims claims = getClaims(token);\r\n        if (claims != null) {\r\n            return claims.getSubject();\r\n        }\r\n        return null;\r\n    }\r\n\r\n    private Claims getClaims(String token) {\r\n        try{\r\n            return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();\r\n        }catch (Exception e ){\r\n            return null;\r\n        }\r\n\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/security/JWTUtil.java b/demo/src/main/java/com/example/demo/security/JWTUtil.java
+--- a/demo/src/main/java/com/example/demo/security/JWTUtil.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/security/JWTUtil.java	(date 1627601184275)
+@@ -19,8 +19,11 @@
+     private Long expiration;
+ 
+     public String generateToken(String username) {
+-        return Jwts.builder().setSubject(username).setExpiration(new Date(System.currentTimeMillis() + expiration))
+-                .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
++        return Jwts.builder()
++                .setSubject(username)
++                .setExpiration(new Date(System.currentTimeMillis() + expiration))
++                .signWith(SignatureAlgorithm.HS512, secret.getBytes())
++                .compact();
+     }
+ 
+     public boolean tokenValido(String token) {
+@@ -33,7 +36,7 @@
+                 return true;
+             }
+         }
+-    return false;
++        return false;
+     }
+ 
+     public String getUsername(String token) {
+@@ -45,13 +48,11 @@
+     }
+ 
+     private Claims getClaims(String token) {
+-        try{
++        try {
+             return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+-        }catch (Exception e ){
++        }
++        catch (Exception e) {
+             return null;
+         }
+-
+     }
+-
+-
+ }
+Index: demo/src/main/java/com/example/demo/domain/Categoria.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\n\r\nimport com.fasterxml.jackson.annotation.JsonManagedReference;\r\nimport com.sun.istack.NotNull;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\n\r\n\r\n@Entity\r\npublic class Categoria implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    @NotNull\r\n    private String nome;\r\n\r\n    @OneToMany(mappedBy = \"categoria\")\r\n    private List<Fornecedor> fornecedor = new ArrayList<>();\r\n\r\n\r\n    public Categoria(){}\r\n\r\n\r\n    public Categoria(Long id , String nome){\r\n        this.id= id ;\r\n        this.nome = nome;\r\n    }\r\n\r\n//    public List<Produto> getProdutos() {\r\n//        return produtos;\r\n//    }\r\n//\r\n//    public void setProdutos(List<Produto> produtos) {\r\n//        this.produtos = produtos;\r\n//    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public String getNome() {\r\n        return nome;\r\n    }\r\n\r\n    public void setNome(String nome) {\r\n        this.nome = nome;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Categoria categoria = (Categoria) o;\r\n        return Objects.equals(id, categoria.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Categoria.java b/demo/src/main/java/com/example/demo/domain/Categoria.java
+--- a/demo/src/main/java/com/example/demo/domain/Categoria.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Categoria.java	(date 1631925250893)
+@@ -1,7 +1,6 @@
+ package com.example.demo.domain;
+ 
+ 
+-import com.fasterxml.jackson.annotation.JsonManagedReference;
+ import com.sun.istack.NotNull;
+ 
+ import javax.persistence.*;
+@@ -26,7 +25,6 @@
+     @OneToMany(mappedBy = "categoria")
+     private List<Fornecedor> fornecedor = new ArrayList<>();
+ 
+-
+     public Categoria(){}
+ 
+ 
+Index: demo/src/main/java/com/example/demo/service/EmailService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/service/EmailService.java b/demo/src/main/java/com/example/demo/service/EmailService.java
+new file mode 100644
+--- /dev/null	(date 1625415804961)
++++ b/demo/src/main/java/com/example/demo/service/EmailService.java	(date 1625415804961)
+@@ -0,0 +1,9 @@
++package com.example.demo.service;
++
++import org.springframework.mail.SimpleMailMessage;
++
++public interface EmailService {
++
++    void sendEmail(SimpleMailMessage message);
++
++}
+Index: demo/src/main/java/com/example/demo/service/interfaces/BaseEndPoint.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/service/interfaces/BaseEndPoint.java b/demo/src/main/java/com/example/demo/service/interfaces/BaseEndPoint.java
+new file mode 100644
+--- /dev/null	(date 1632670065555)
++++ b/demo/src/main/java/com/example/demo/service/interfaces/BaseEndPoint.java	(date 1632670065555)
+@@ -0,0 +1,8 @@
++package com.example.demo.service.interfaces;
++
++
++
++public interface BaseEndPoint<T>  {
++
++
++}
+Index: demo/src/main/java/com/example/demo/resources/ClienteResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.resources;\r\n\r\n\r\n\r\nimport com.example.demo.domain.Cliente;\r\n\r\nimport com.example.demo.domain.Fornecedor;\r\nimport com.example.demo.service.ClienteService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport org.springframework.web.servlet.support.ServletUriComponentsBuilder;\r\n\r\nimport java.net.URI;\r\n\r\n@RestController\r\n@RequestMapping(value = \"/clientes\")\r\npublic class ClienteResource {\r\n\r\n    @Autowired\r\n    private ClienteService clienteService;\r\n\r\n\r\n    @GetMapping\r\n    @RequestMapping(value = \"/{id}\")\r\n    public ResponseEntity<?> findByID(@PathVariable Long id){\r\n       Cliente cliente = clienteService.findByID(id);\r\n        return ResponseEntity.ok().body(cliente);\r\n    }\r\n\r\n    @PostMapping\r\n    public ResponseEntity<Void> sava(@RequestBody Cliente cliente){\r\n        cliente = clienteService.save(cliente);\r\n        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path(\"/{id}\").buildAndExpand(cliente.getId()).toUri();\r\n        return ResponseEntity.created(uri).build();\r\n    }\r\n\r\n\r\n//    @PostMapping\r\n//    @CrossOrigin\r\n//    public ResponseEntity<Void> save(@RequestBody Fornecedor fornecedor){\r\n//        fornecedor = fornecedorService.save(fornecedor);\r\n//        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path(\"/{id}\").buildAndExpand(fornecedor.getId()).toUri();\r\n//        return  ResponseEntity.created(uri).build();\r\n//    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/ClienteResource.java b/demo/src/main/java/com/example/demo/resources/ClienteResource.java
+--- a/demo/src/main/java/com/example/demo/resources/ClienteResource.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/resources/ClienteResource.java	(date 1632363390188)
+@@ -14,28 +14,25 @@
+ import java.net.URI;
+ 
+ @RestController
+-@RequestMapping(value = "/clientes")
++@RequestMapping(value = "clientes")
+ public class ClienteResource {
+ 
+     @Autowired
+     private ClienteService clienteService;
+ 
+-
+-    @GetMapping
+-    @RequestMapping(value = "/{id}")
++    @GetMapping(value = "/{id}")
+     public ResponseEntity<?> findByID(@PathVariable Long id){
+        Cliente cliente = clienteService.findByID(id);
+         return ResponseEntity.ok().body(cliente);
+     }
+ 
+     @PostMapping
+-    public ResponseEntity<Void> sava(@RequestBody Cliente cliente){
++    public ResponseEntity<Void> salvar(@RequestBody Cliente cliente){
+         cliente = clienteService.save(cliente);
+         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(cliente.getId()).toUri();
+         return ResponseEntity.created(uri).build();
+     }
+ 
+-
+ //    @PostMapping
+ //    @CrossOrigin
+ //    public ResponseEntity<Void> save(@RequestBody Fornecedor fornecedor){
+Index: demo/src/main/java/com/example/demo/repositories/PedidoRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.repositories;\r\n\r\nimport com.example.demo.domain.Pedido;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\n@Repository\r\npublic interface PedidoRepository extends JpaRepository<Pedido, Long> {\r\n\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/repositories/PedidoRepository.java b/demo/src/main/java/com/example/demo/repositories/PedidoRepository.java
+--- a/demo/src/main/java/com/example/demo/repositories/PedidoRepository.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/repositories/PedidoRepository.java	(date 1628901153673)
+@@ -6,10 +6,4 @@
+ 
+ @Repository
+ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+-
+-
+-
+-
+-
+-
+ }
+Index: demo/src/main/java/com/example/demo/domain/Cliente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.example.demo.domain.enums.Perfil;\r\nimport com.example.demo.domain.enums.TipoCliente;\r\nimport com.fasterxml.jackson.annotation.JsonBackReference;\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\nimport sun.misc.Perf;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.*;\r\nimport java.util.stream.Collectors;\r\n\r\n@Entity\r\npublic class Cliente implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private String nome;\r\n    private String email;\r\n    private String cpfOuCnpj;\r\n    private Integer tipo;\r\n\r\n    @JsonIgnore\r\n    private String senha;\r\n\r\n\r\n    @OneToMany(mappedBy = \"cliente\" , cascade = CascadeType.ALL)\r\n    private List<Endereco> enderecos = new ArrayList<>();\r\n\r\n\r\n    @ElementCollection\r\n    @CollectionTable(name = \"TELEFONE\")\r\n    private Set<String>  telefones = new HashSet<>();\r\n\r\n    @ElementCollection(fetch = FetchType.EAGER)\r\n    @CollectionTable(name = \"PERFIS\")\r\n    private Set<Integer> perfis = new HashSet<>();\r\n\r\n    @JsonIgnore\r\n    @OneToMany(mappedBy = \"cliente\")\r\n    private List<Pedido> pedidos = new ArrayList<>();\r\n\r\n    public Cliente (){\r\n        addPerfil(Perfil.CLIENTE);\r\n    }\r\n\r\n    public Cliente(Long id, String nome, String email, String cpfOuCnpj, TipoCliente tipo , String senha) {\r\n        this.id = id;\r\n        this.nome = nome;\r\n        this.email = email;\r\n        this.cpfOuCnpj = cpfOuCnpj;\r\n        this.tipo = (tipo == null) ? null : tipo.getCod();\r\n        this.senha = senha;\r\n        addPerfil(Perfil.CLIENTE);\r\n    }\r\n\r\n    public Set<Perfil> getPerfis(){\r\n        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());\r\n    }\r\n\r\n    public void addPerfil(Perfil perfil){\r\n        perfis.add(perfil.getCod());\r\n    }\r\n\r\n    public List<Pedido> getPedidos() {\r\n        return pedidos;\r\n    }\r\n\r\n    public void setPedidos(List<Pedido> pedidos) {\r\n        this.pedidos = pedidos;\r\n    }\r\n\r\n\r\n    public String getSenha() {\r\n        return senha;\r\n    }\r\n\r\n    public void setSenha(String senha) {\r\n        this.senha = senha;\r\n    }\r\n\r\n    public void setTipo(Integer tipo) {\r\n        this.tipo = tipo;\r\n    }\r\n\r\n    public List<Endereco> getEnderecos() {\r\n        return enderecos;\r\n    }\r\n\r\n    public void setEnderecos(List<Endereco> enderecos) {\r\n        this.enderecos = enderecos;\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getNome() {\r\n        return nome;\r\n    }\r\n\r\n    public void setNome(String nome) {\r\n        this.nome = nome;\r\n    }\r\n\r\n    public String getEmail() {\r\n        return email;\r\n    }\r\n\r\n    public void setEmail(String email) {\r\n        this.email = email;\r\n    }\r\n\r\n    public String getCpfOuCnpj() {\r\n        return cpfOuCnpj;\r\n    }\r\n\r\n    public void setCpfOuCnpj(String cpfOuCnpj) {\r\n        this.cpfOuCnpj = cpfOuCnpj;\r\n    }\r\n\r\n    public TipoCliente getTipo() {\r\n        return TipoCliente.toEnum(tipo);\r\n    }\r\n\r\n    public void setTipo(TipoCliente tipo) {\r\n        this.tipo = tipo.getCod();\r\n    }\r\n\r\n    public Set<String> getTelefones() {\r\n        return telefones;\r\n    }\r\n\r\n    public void setTelefones(Set<String> telefones) {\r\n        this.telefones = telefones;\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Cliente cliente = (Cliente) o;\r\n        return Objects.equals(id, cliente.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Cliente.java b/demo/src/main/java/com/example/demo/domain/Cliente.java
+--- a/demo/src/main/java/com/example/demo/domain/Cliente.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Cliente.java	(date 1631925250885)
+@@ -2,15 +2,15 @@
+ 
+ import com.example.demo.domain.enums.Perfil;
+ import com.example.demo.domain.enums.TipoCliente;
+-import com.fasterxml.jackson.annotation.JsonBackReference;
+ import com.fasterxml.jackson.annotation.JsonIgnore;
+-import sun.misc.Perf;
++import lombok.Getter;
+ 
+ import javax.persistence.*;
+ import java.io.Serializable;
+ import java.util.*;
+ import java.util.stream.Collectors;
+ 
++@Getter
+ @Entity
+ public class Cliente implements Serializable {
+ 
+@@ -24,14 +24,10 @@
+     private String email;
+     private String cpfOuCnpj;
+     private Integer tipo;
+-
+-    @JsonIgnore
+     private String senha;
+ 
+-
+-    @OneToMany(mappedBy = "cliente" , cascade = CascadeType.ALL)
+-    private List<Endereco> enderecos = new ArrayList<>();
+-
++//    @OneToMany(mappedBy = "cliente" , cascade = CascadeType.ALL)
++//    private List<Endereco> enderecos = new ArrayList<>();
+ 
+     @ElementCollection
+     @CollectionTable(name = "TELEFONE")
+@@ -59,43 +55,6 @@
+         addPerfil(Perfil.CLIENTE);
+     }
+ 
+-    public Set<Perfil> getPerfis(){
+-        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+-    }
+-
+-    public void addPerfil(Perfil perfil){
+-        perfis.add(perfil.getCod());
+-    }
+-
+-    public List<Pedido> getPedidos() {
+-        return pedidos;
+-    }
+-
+-    public void setPedidos(List<Pedido> pedidos) {
+-        this.pedidos = pedidos;
+-    }
+-
+-
+-    public String getSenha() {
+-        return senha;
+-    }
+-
+-    public void setSenha(String senha) {
+-        this.senha = senha;
+-    }
+-
+-    public void setTipo(Integer tipo) {
+-        this.tipo = tipo;
+-    }
+-
+-    public List<Endereco> getEnderecos() {
+-        return enderecos;
+-    }
+-
+-    public void setEnderecos(List<Endereco> enderecos) {
+-        this.enderecos = enderecos;
+-    }
+-
+     public Long getId() {
+         return id;
+     }
+@@ -136,6 +95,30 @@
+         this.tipo = tipo.getCod();
+     }
+ 
++    public String getSenha() {
++        return senha;
++    }
++
++    public void setSenha(String senha) {
++        this.senha = senha;
++    }
++
++    public Set<Perfil> getPerfis() {
++        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
++    }
++
++    public void addPerfil(Perfil perfil) {
++        perfis.add(perfil.getCod());
++    }
++
++//    public List<Endereco> getEnderecos() {
++//        return enderecos;
++//    }
++//
++//    public void setEnderecos(List<Endereco> enderecos) {
++//        this.enderecos = enderecos;
++//    }
++
+     public Set<String> getTelefones() {
+         return telefones;
+     }
+@@ -144,6 +127,14 @@
+         this.telefones = telefones;
+     }
+ 
++    public List<Pedido> getPedidos() {
++        return pedidos;
++    }
++
++    public void setPedidos(List<Pedido> pedidos) {
++        this.pedidos = pedidos;
++    }
++
+ 
+     @Override
+     public boolean equals(Object o) {
+Index: demo/src/main/java/com/example/demo/domain/ProtocoloProdutos.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport javax.persistence.Entity;\r\nimport java.io.Serializable;\r\n\r\n@Entity\r\npublic class ProtocoloProdutos implements Serializable {\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/ProtocoloProdutos.java b/demo/src/main/java/com/example/demo/domain/ProtocoloProdutos.java
+--- a/demo/src/main/java/com/example/demo/domain/ProtocoloProdutos.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/ProtocoloProdutos.java	(date 1631755022062)
+@@ -1,10 +1,24 @@
+ package com.example.demo.domain;
+ 
+ import javax.persistence.Entity;
++import javax.persistence.GeneratedValue;
++import javax.persistence.GenerationType;
++import javax.persistence.Id;
+ import java.io.Serializable;
+ 
+ @Entity
+ public class ProtocoloProdutos implements Serializable {
+ 
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long id;
+ 
++    public void setId(Long id) {
++        this.id = id;
++    }
++
++    @Id
++    public Long getId() {
++        return id;
++    }
+ }
+Index: demo/src/main/java/com/example/demo/dto/ClienteNewDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/dto/ClienteNewDTO.java b/demo/src/main/java/com/example/demo/domain/dto/ClienteNewDTO.java
+rename from demo/src/main/java/com/example/demo/dto/ClienteNewDTO.java
+rename to demo/src/main/java/com/example/demo/domain/dto/ClienteNewDTO.java
+--- a/demo/src/main/java/com/example/demo/dto/ClienteNewDTO.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/dto/ClienteNewDTO.java	(date 1632670245683)
+@@ -1,4 +1,4 @@
+-package com.example.demo.dto;
++package com.example.demo.domain.dto;
+ 
+ import org.hibernate.validator.constraints.Length;
+ 
+Index: demo/src/main/java/com/example/demo/resources/CategoriaResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.resources;\r\n\r\n\r\nimport com.example.demo.domain.Categoria;\r\nimport com.example.demo.dto.CategoriaDTO;\r\nimport com.example.demo.service.CategoriaServiceImpl;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.PageRequest;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.security.access.prepost.PreAuthorize;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport org.springframework.web.servlet.support.ServletUriComponentsBuilder;\r\n\r\nimport java.net.URI;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\n@RestController\r\n@RequestMapping(value = \"categorias\")\r\n@CrossOrigin\r\npublic class CategoriaResource {\r\n\r\n    @Autowired\r\n    private CategoriaServiceImpl categoriaService;\r\n\r\n    @GetMapping\r\n    public List<Categoria> findAll(){\r\n//    public ResponseEntity<List<CategoriaDTO>> findAll(){\r\n//           List<Categoria> list = categoriaService.findAll();\r\n//            List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());\r\n        return categoriaService.findAll();\r\n    }\r\n\r\n\r\n    @GetMapping\r\n    @RequestMapping(value = \"/{id}\")\r\n    public ResponseEntity<Categoria> findByID(@PathVariable Long id){\r\n        Categoria categoria = categoriaService.findByID(id);\r\n        return ResponseEntity.ok().body(categoria);\r\n    }\r\n\r\n\r\n    @PreAuthorize(\"hasAnyRole('ADMIN')\")\r\n    @PostMapping\r\n    @CrossOrigin\r\n    public ResponseEntity<Void> save(@RequestBody Categoria categoria){\r\n        categoria = categoriaService.save(categoria);\r\n        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path(\"/{id}\").buildAndExpand(categoria.getId()).toUri();\r\n        return  ResponseEntity.created(uri).build();\r\n    }\r\n\r\n    @RequestMapping(value=\"/{id}\" , method=RequestMethod.PUT)\r\n    public ResponseEntity<Void> update(@RequestBody Categoria obj , @PathVariable Long id){\r\n        obj.setId(id);\r\n        obj = categoriaService.update(obj);\r\n        return ResponseEntity.noContent().build();\r\n\r\n    }\r\n\r\n    @RequestMapping(value=\"/{id}\" , method=RequestMethod.DELETE)\r\n   // public ResponseEntity<Void> delete(@PathVariable Long id)\r\n    public void delete(@PathVariable Long id){\r\n        categoriaService.delete(id);\r\n//        return ResponseEntity.noContent().build();\r\n    }\r\n\r\n    @GetMapping\r\n    @RequestMapping(value = \"/page\")\r\n    public ResponseEntity<List<CategoriaDTO>> findPage(Pageable page){\r\n        Page<Categoria> list = categoriaService.findPage(page);\r\n        List<CategoriaDTO> listDto = list.stream().map(CategoriaDTO::new).collect(Collectors.toList());\r\n        return ResponseEntity.ok().body(listDto);\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/CategoriaResource.java b/demo/src/main/java/com/example/demo/resources/CategoriaResource.java
+--- a/demo/src/main/java/com/example/demo/resources/CategoriaResource.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/resources/CategoriaResource.java	(date 1632792224380)
+@@ -2,77 +2,87 @@
+ 
+ 
+ import com.example.demo.domain.Categoria;
+-import com.example.demo.dto.CategoriaDTO;
+ import com.example.demo.service.CategoriaServiceImpl;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.data.domain.Page;
+-import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
+ import org.springframework.http.ResponseEntity;
+-import org.springframework.security.access.prepost.PreAuthorize;
+ import org.springframework.web.bind.annotation.*;
+ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+ 
++import javax.validation.Valid;
+ import java.net.URI;
+ import java.util.List;
+-import java.util.stream.Collectors;
+ 
+ @RestController
+ @RequestMapping(value = "categorias")
+ @CrossOrigin
+ public class CategoriaResource {
+ 
+-    @Autowired
+-    private CategoriaServiceImpl categoriaService;
+ 
+-    @GetMapping
+-    public List<Categoria> findAll(){
+-//    public ResponseEntity<List<CategoriaDTO>> findAll(){
+-//           List<Categoria> list = categoriaService.findAll();
+-//            List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+-        return categoriaService.findAll();
+-    }
++    private final CategoriaServiceImpl service;
+ 
++    public CategoriaResource(CategoriaServiceImpl service) {
++        this.service = service;
++    }
+ 
+     @GetMapping
+-    @RequestMapping(value = "/{id}")
++    public ResponseEntity<List<Categoria>> findAll(){
++        return ResponseEntity.ok().body(service.findAll());
++    }
++
++
++    @GetMapping( value = "/{id}")
+     public ResponseEntity<Categoria> findByID(@PathVariable Long id){
+-        Categoria categoria = categoriaService.findByID(id);
++        Categoria categoria = service.findByID(id);
+         return ResponseEntity.ok().body(categoria);
+     }
+ 
+ 
+-    @PreAuthorize("hasAnyRole('ADMIN')")
++//    @PreAuthorize("hasAnyRole('ADMIN')")
+     @PostMapping
+     @CrossOrigin
+-    public ResponseEntity<Void> save(@RequestBody Categoria categoria){
+-        categoria = categoriaService.save(categoria);
++    public ResponseEntity<Void> save(@RequestBody @Valid Categoria categoria){
++        categoria = service.save(categoria);
+         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(categoria.getId()).toUri();
+         return  ResponseEntity.created(uri).build();
+     }
+ 
+-    @RequestMapping(value="/{id}" , method=RequestMethod.PUT)
++    @PutMapping(value="/{id}" )
+     public ResponseEntity<Void> update(@RequestBody Categoria obj , @PathVariable Long id){
+         obj.setId(id);
+-        obj = categoriaService.update(obj);
++        obj = service.update(obj);
+         return ResponseEntity.noContent().build();
+ 
+     }
+ 
+-    @RequestMapping(value="/{id}" , method=RequestMethod.DELETE)
+-   // public ResponseEntity<Void> delete(@PathVariable Long id)
+-    public void delete(@PathVariable Long id){
+-        categoriaService.delete(id);
+-//        return ResponseEntity.noContent().build();
++    @DeleteMapping(value="/{id}" )
++    public ResponseEntity<Void> delete(@PathVariable Long id){
++        service.delete(id);
++        return ResponseEntity.noContent().build();
+     }
+ 
+-    @GetMapping
+-    @RequestMapping(value = "/page")
+-    public ResponseEntity<List<CategoriaDTO>> findPage(Pageable page){
+-        Page<Categoria> list = categoriaService.findPage(page);
+-        List<CategoriaDTO> listDto = list.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+-        return ResponseEntity.ok().body(listDto);
++    @GetMapping(value = "/page")
++    public Page<Categoria> findPage(
++            @RequestParam(value="nome", defaultValue="") String nome,
++            @RequestParam(value="page", defaultValue="0") Integer page,
++            @RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage,
++            @RequestParam(value="orderBy", defaultValue="nome") String orderBy,
++            @RequestParam(value="direction", defaultValue="ASC") String direction) {
++        return service.findPage(nome ,  page , linesPerPage , orderBy , direction  );
+     }
+ 
++
++//    @GetMapping
++//    @RequestMapping(value = "/page")
++//    public ResponseEntity<List<CategoriaDTO>> findPage(Pageable page){
++//        Page<Categoria> list = categoriaService.findPage(page);
++//        List<CategoriaDTO> listDto = list.stream().map(CategoriaDTO::new).collect(Collectors.toList());
++//        return ResponseEntity.ok().body(listDto);
++//    }
++
++
++    //           List<Categoria> list = categoriaService.findAll();
++//            List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+ 
+ }
+Index: .idea/libraries/Maven__io_springfox_springfox_schema_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_schema_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_schema_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622212)
++++ b/.idea/libraries/Maven__io_springfox_springfox_schema_2_9_2.xml	(date 1632354622212)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-schema:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-schema/2.9.2/springfox-schema-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-schema/2.9.2/springfox-schema-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-schema/2.9.2/springfox-schema-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/domain/Fornecedor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.sun.istack.NotNull;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\n\r\n@Entity\r\npublic class Fornecedor implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    @JoinColumn(name=\"razao_social\")\r\n    private String razaoSocial;\r\n\r\n    @NotNull\r\n    private String nomeFantasma;\r\n\r\n    @NotNull\r\n    private String inscricao;\r\n\r\n    @NotNull\r\n    private String email;\r\n\r\n    @NotNull\r\n    private String telefone;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name=\"categoria_id\")\r\n    private Categoria categoria;\r\n\r\n    public Fornecedor(){}\r\n\r\n    public Fornecedor(Long id, String razaosocial, String ramo, String nomeFantasma, String inscricao , String email , String telefone , Categoria categoria) {\r\n        this.id = id;\r\n        this.razaoSocial = razaosocial;\r\n        this.nomeFantasma = nomeFantasma;\r\n        this.inscricao = inscricao;\r\n        this.email = email;\r\n        this.telefone = telefone;\r\n        this.categoria = categoria;\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public String getTelefone() {\r\n        return telefone;\r\n    }\r\n\r\n    public void setTelefone(String telefone) {\r\n        this.telefone = telefone;\r\n    }\r\n\r\n    public Categoria getCategoria() {\r\n        return categoria;\r\n    }\r\n\r\n    public void setCategoria(Categoria categoria) {\r\n        this.categoria = categoria;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n\r\n    public String getRazaoSocial() {\r\n        return razaoSocial;\r\n    }\r\n\r\n    public void setRazaoSocial(String razaoSocial) {\r\n        this.razaoSocial = razaoSocial;\r\n    }\r\n\r\n\r\n    public String getNomeFantasma() {\r\n        return nomeFantasma;\r\n    }\r\n\r\n    public void setNomeFantasma(String nomeFantasma) {\r\n        this.nomeFantasma = nomeFantasma;\r\n    }\r\n\r\n    public String getInscricao() {\r\n        return inscricao;\r\n    }\r\n\r\n    public void setInscricao(String inscricao) {\r\n        this.inscricao = inscricao;\r\n    }\r\n\r\n    public String getEmail() {\r\n        return email;\r\n    }\r\n\r\n    public void setEmail(String email) {\r\n        this.email = email;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Fornecedor that = (Fornecedor) o;\r\n        return id.equals(that.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Fornecedor.java b/demo/src/main/java/com/example/demo/domain/Fornecedor.java
+--- a/demo/src/main/java/com/example/demo/domain/Fornecedor.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Fornecedor.java	(date 1632108684735)
+@@ -1,6 +1,8 @@
+ package com.example.demo.domain;
+ 
+ import com.sun.istack.NotNull;
++import lombok.Getter;
++import lombok.Setter;
+ 
+ import javax.persistence.*;
+ import java.io.Serializable;
+@@ -8,104 +10,54 @@
+ import java.util.List;
+ import java.util.Objects;
+ 
++@Getter
+ @Entity
+ public class Fornecedor implements Serializable {
+ 
+     private static final long serialVersionUID = 1L;
+ 
+     @Id
++    @Setter
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
+ 
++    @Setter
++    private String codigo;
++
+     @JoinColumn(name="razao_social")
+     private String razaoSocial;
+ 
++    @Setter
+     @NotNull
+     private String nomeFantasma;
+ 
++    @Setter
+     @NotNull
+     private String inscricao;
+ 
+-    @NotNull
+-    private String email;
+-
+-    @NotNull
+-    private String telefone;
+-
++    @Setter
+     @ManyToOne
+     @JoinColumn(name="categoria_id")
+     private Categoria categoria;
+ 
++    @Setter
++    @OneToMany(
++            mappedBy = "fornecedor", targetEntity = Contato.class,
++            fetch = FetchType.LAZY,
++            cascade = CascadeType.ALL
++    )
++    private List<Contato> contato;
++
+     public Fornecedor(){}
+ 
+-    public Fornecedor(Long id, String razaosocial, String ramo, String nomeFantasma, String inscricao , String email , String telefone , Categoria categoria) {
++    public Fornecedor(Long id, String razaosocial, String nomeFantasma, String inscricao , Categoria categoria) {
+         this.id = id;
+         this.razaoSocial = razaosocial;
+         this.nomeFantasma = nomeFantasma;
+         this.inscricao = inscricao;
+-        this.email = email;
+-        this.telefone = telefone;
+-        this.categoria = categoria;
+-    }
+-
+-    public Long getId() {
+-        return id;
+-    }
+-
+-    public String getTelefone() {
+-        return telefone;
+-    }
+-
+-    public void setTelefone(String telefone) {
+-        this.telefone = telefone;
+-    }
+-
+-    public Categoria getCategoria() {
+-        return categoria;
+-    }
+-
+-    public void setCategoria(Categoria categoria) {
+         this.categoria = categoria;
+     }
+ 
+-    public void setId(Long id) {
+-        this.id = id;
+-    }
+-
+-
+-    public String getRazaoSocial() {
+-        return razaoSocial;
+-    }
+-
+-    public void setRazaoSocial(String razaoSocial) {
+-        this.razaoSocial = razaoSocial;
+-    }
+-
+-
+-    public String getNomeFantasma() {
+-        return nomeFantasma;
+-    }
+-
+-    public void setNomeFantasma(String nomeFantasma) {
+-        this.nomeFantasma = nomeFantasma;
+-    }
+-
+-    public String getInscricao() {
+-        return inscricao;
+-    }
+-
+-    public void setInscricao(String inscricao) {
+-        this.inscricao = inscricao;
+-    }
+-
+-    public String getEmail() {
+-        return email;
+-    }
+-
+-    public void setEmail(String email) {
+-        this.email = email;
+-    }
+-
+     @Override
+     public boolean equals(Object o) {
+         if (this == o) return true;
+Index: demo/src/main/java/com/example/demo/domain/Protocolo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\n\r\nimport jdk.nashorn.internal.objects.annotations.Getter;\r\nimport jdk.nashorn.internal.objects.annotations.Setter;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Entity\r\npublic class Protocolo implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private Integer codigo;\r\n\r\n    @OneToMany(mappedBy = \"protocolo\")\r\n    private List<Produto> produtos = new ArrayList<>();\r\n\r\n    @OneToMany(mappedBy = \"categoria\")\r\n    private List<ProtocoloMensagem> mensagems = new ArrayList<>();\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Protocolo.java b/demo/src/main/java/com/example/demo/domain/Protocolo.java
+--- a/demo/src/main/java/com/example/demo/domain/Protocolo.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Protocolo.java	(date 1631755114913)
+@@ -1,8 +1,7 @@
+ package com.example.demo.domain;
+ 
+ 
+-import jdk.nashorn.internal.objects.annotations.Getter;
+-import jdk.nashorn.internal.objects.annotations.Setter;
++import lombok.Data;
+ 
+ import javax.persistence.*;
+ import java.io.Serializable;
+@@ -10,6 +9,7 @@
+ import java.util.List;
+ 
+ @Entity
++@Data
+ public class Protocolo implements Serializable {
+ 
+     private static final long serialVersionUID = 1L;
+@@ -20,10 +20,10 @@
+ 
+     private Integer codigo;
+ 
++    private String assunto;
++
+     @OneToMany(mappedBy = "protocolo")
+     private List<Produto> produtos = new ArrayList<>();
+ 
+-    @OneToMany(mappedBy = "categoria")
+-    private List<ProtocoloMensagem> mensagems = new ArrayList<>();
+-
++    
+ }
+Index: .idea/libraries/Maven__io_springfox_springfox_core_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_core_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_core_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622202)
++++ b/.idea/libraries/Maven__io_springfox_springfox_core_2_9_2.xml	(date 1632354622202)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-core:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-core/2.9.2/springfox-core-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-core/2.9.2/springfox-core-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-core/2.9.2/springfox-core-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__com_google_guava_guava_20_0.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__com_google_guava_guava_20_0.xml b/.idea/libraries/Maven__com_google_guava_guava_20_0.xml
+new file mode 100644
+--- /dev/null	(date 1632354622190)
++++ b/.idea/libraries/Maven__com_google_guava_guava_20_0.xml	(date 1632354622190)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: com.google.guava:guava:20.0">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__io_springfox_springfox_swagger_common_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_swagger_common_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_swagger_common_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622256)
++++ b/.idea/libraries/Maven__io_springfox_springfox_swagger_common_2_9_2.xml	(date 1632354622256)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-swagger-common:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger-common/2.9.2/springfox-swagger-common-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger-common/2.9.2/springfox-swagger-common-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger-common/2.9.2/springfox-swagger-common-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__io_springfox_springfox_swagger2_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_swagger2_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_swagger2_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622246)
++++ b/.idea/libraries/Maven__io_springfox_springfox_swagger2_2_9_2.xml	(date 1632354622246)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-swagger2:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger2/2.9.2/springfox-swagger2-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger2/2.9.2/springfox-swagger2-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-swagger2/2.9.2/springfox-swagger2-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__io_springfox_springfox_spring_web_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_spring_web_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_spring_web_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622235)
++++ b/.idea/libraries/Maven__io_springfox_springfox_spring_web_2_9_2.xml	(date 1632354622235)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-spring-web:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spring-web/2.9.2/springfox-spring-web-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__io_springfox_springfox_spi_2_9_2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_springfox_springfox_spi_2_9_2.xml b/.idea/libraries/Maven__io_springfox_springfox_spi_2_9_2.xml
+new file mode 100644
+--- /dev/null	(date 1632354622223)
++++ b/.idea/libraries/Maven__io_springfox_springfox_spi_2_9_2.xml	(date 1632354622223)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.springfox:springfox-spi:2.9.2">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spi/2.9.2/springfox-spi-2.9.2.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spi/2.9.2/springfox-spi-2.9.2-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/springfox/springfox-spi/2.9.2/springfox-spi-2.9.2-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/security/UserSS.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.security;\r\n\r\nimport com.example.demo.domain.enums.Perfil;\r\nimport org.springframework.security.core.GrantedAuthority;\r\nimport org.springframework.security.core.authority.SimpleGrantedAuthority;\r\nimport org.springframework.security.core.userdetails.UserDetails;\r\n\r\nimport java.util.Collection;\r\nimport java.util.Set;\r\nimport java.util.stream.Collectors;\r\n\r\npublic class UserSS implements UserDetails {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    private Long id;\r\n    private String email;\r\n    private String senha;\r\n    private Collection<? extends GrantedAuthority> authorities;\r\n\r\n\r\n    public UserSS(){}\r\n\r\n    public UserSS(Long id, String email, String senha, Set<Perfil> perfis) {\r\n        this.id = id;\r\n        this.email = email;\r\n        this.senha = senha;\r\n        this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());\r\n    }\r\n\r\n    public Long getId(){\r\n        return id;\r\n    }\r\n\r\n    @Override\r\n    public Collection<? extends GrantedAuthority> getAuthorities() {\r\n        return authorities;\r\n    }\r\n\r\n    @Override\r\n    public String getPassword() {\r\n        return senha;\r\n    }\r\n\r\n    @Override\r\n    public String getUsername() {\r\n        return email;\r\n    }\r\n\r\n    @Override\r\n    public boolean isAccountNonExpired() {\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean isAccountNonLocked() {\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean isCredentialsNonExpired() {\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean isEnabled() {\r\n        return true;\r\n    }\r\n\r\n    public boolean hasRole(Perfil perfil){\r\n        return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/security/UserSS.java b/demo/src/main/java/com/example/demo/security/UserSS.java
+--- a/demo/src/main/java/com/example/demo/security/UserSS.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/security/UserSS.java	(date 1627600616158)
+@@ -10,7 +10,6 @@
+ import java.util.stream.Collectors;
+ 
+ public class UserSS implements UserDetails {
+-
+     private static final long serialVersionUID = 1L;
+ 
+     private Long id;
+@@ -18,17 +17,18 @@
+     private String senha;
+     private Collection<? extends GrantedAuthority> authorities;
+ 
+-
+-    public UserSS(){}
++    public UserSS() {
++    }
+ 
+     public UserSS(Long id, String email, String senha, Set<Perfil> perfis) {
++        super();
+         this.id = id;
+         this.email = email;
+         this.senha = senha;
+         this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toList());
+     }
+ 
+-    public Long getId(){
++    public Long getId() {
+         return id;
+     }
+ 
+@@ -67,8 +67,7 @@
+         return true;
+     }
+ 
+-    public boolean hasRole(Perfil perfil){
++    public boolean hasRole(Perfil perfil) {
+         return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
+     }
+-
+ }
+Index: .idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml b/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml
+new file mode 100644
+--- /dev/null	(date 1632354622302)
++++ b/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_core_1_2_0_RELEASE.xml	(date 1632354622302)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-core/1.2.0.RELEASE/spring-plugin-core-1.2.0.RELEASE.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-core/1.2.0.RELEASE/spring-plugin-core-1.2.0.RELEASE-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-core/1.2.0.RELEASE/spring-plugin-core-1.2.0.RELEASE-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_springframework_boot_spring_boot_starter_mail_2_4_5.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_mail_2_4_5.xml b/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_mail_2_4_5.xml
+new file mode 100644
+--- /dev/null	(date 1625415329627)
++++ b/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_mail_2_4_5.xml	(date 1625415329627)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.springframework.boot:spring-boot-starter-mail:2.4.5">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-mail/2.4.5/spring-boot-starter-mail-2.4.5.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-mail/2.4.5/spring-boot-starter-mail-2.4.5-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-mail/2.4.5/spring-boot-starter-mail-2.4.5-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/domain/Produto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.*;\r\n\r\n@Entity\r\npublic class Produto implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private String nome;\r\n\r\n    private Double preco;\r\n\r\n    private String unidade;\r\n\r\n    @JsonIgnore\r\n    @ManyToMany\r\n    @JoinTable(name = \"PROTOCOLO_CATEGORIA\" , joinColumns = @JoinColumn(name = \"produto_id\") , inverseJoinColumns = @JoinColumn(name= \"protocolo_id\"))\r\n    private List<ProtocoloProdutos> categorias = new ArrayList<>();\r\n\r\n    public Produto(){}\r\n\r\n    public Produto(Long id, String nome, Double preco){\r\n        super();\r\n        this.id = id ;\r\n        this.nome = nome;\r\n        this.preco = preco;\r\n    }\r\n\r\n    public String getNome() {\r\n        return nome;\r\n    }\r\n\r\n    public void setNome(String nome) {\r\n        this.nome = nome;\r\n    }\r\n\r\n    public Double getPreco() {\r\n        return preco;\r\n    }\r\n\r\n    public void setPreco(Double preco) {\r\n        this.preco = preco;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Produto produto = (Produto) o;\r\n        return Objects.equals(id, produto.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Produto.java b/demo/src/main/java/com/example/demo/domain/Produto.java
+--- a/demo/src/main/java/com/example/demo/domain/Produto.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Produto.java	(date 1625877549411)
+@@ -23,16 +23,37 @@
+ 
+     @JsonIgnore
+     @ManyToMany
+-    @JoinTable(name = "PROTOCOLO_CATEGORIA" , joinColumns = @JoinColumn(name = "produto_id") , inverseJoinColumns = @JoinColumn(name= "protocolo_id"))
++    @JoinTable(name = "PROTOCOLO_CATEGORIA" , joinColumns = @JoinColumn(name = "produto_id") , inverseJoinColumns = @JoinColumn(name= "categoria_id"))
+     private List<ProtocoloProdutos> categorias = new ArrayList<>();
+ 
++    @ManyToOne
++    @JoinTable(name = "PROTOCOLO_PRODUTO" , joinColumns = @JoinColumn(name = "produto_id") , inverseJoinColumns = @JoinColumn(name= "protocolo_id"))
++    private Protocolo protocolo;
++
+     public Produto(){}
+ 
+-    public Produto(Long id, String nome, Double preco){
++    public Produto(Long id, String nome, Double preco , String unidade){
+         super();
+         this.id = id ;
+         this.nome = nome;
+         this.preco = preco;
++        this.unidade = unidade;
++    }
++
++    public String getUnidade() {
++        return unidade;
++    }
++
++    public void setUnidade(String unidade) {
++        this.unidade = unidade;
++    }
++
++    public List<ProtocoloProdutos> getCategorias() {
++        return categorias;
++    }
++
++    public void setCategorias(List<ProtocoloProdutos> categorias) {
++        this.categorias = categorias;
+     }
+ 
+     public String getNome() {
+Index: .idea/libraries/Maven__org_mapstruct_mapstruct_1_2_0_Final.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_mapstruct_mapstruct_1_2_0_Final.xml b/.idea/libraries/Maven__org_mapstruct_mapstruct_1_2_0_Final.xml
+new file mode 100644
+--- /dev/null	(date 1632354622291)
++++ b/.idea/libraries/Maven__org_mapstruct_mapstruct_1_2_0_Final.xml	(date 1632354622291)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.mapstruct:mapstruct:1.2.0.Final">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.2.0.Final/mapstruct-1.2.0.Final.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.2.0.Final/mapstruct-1.2.0.Final-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.2.0.Final/mapstruct-1.2.0.Final-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/config/SecurityConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.config;\r\n\r\nimport com.example.demo.security.JWTAuthenticationFilter;\r\nimport com.example.demo.security.JWTAuthorizationFilter;\r\nimport com.example.demo.security.JWTUtil;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.http.HttpMethod;\r\nimport org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\r\nimport org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;\r\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\r\nimport org.springframework.security.config.http.SessionCreationPolicy;\r\nimport org.springframework.security.core.userdetails.UserDetailsService;\r\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\r\nimport org.springframework.web.cors.CorsConfiguration;\r\nimport org.springframework.web.cors.CorsConfigurationSource;\r\nimport org.springframework.web.cors.UrlBasedCorsConfigurationSource;\r\n\r\n@Configuration\r\n@EnableWebSecurity\r\n@EnableGlobalMethodSecurity(prePostEnabled = true)\r\npublic class SecurityConfig extends WebSecurityConfigurerAdapter {\r\n\r\n    @Autowired\r\n    private UserDetailsService userDetailsService;\r\n\r\n    @Autowired\r\n    private JWTUtil jwtUtil;\r\n\r\n    private static final String[] PUBLIC_MATCHERS = {\r\n            \"/fornecedores/**\",\r\n            \"/categorias/**\",\r\n            \"/clientes/**\"\r\n    };\r\n\r\n    private static final String[] PUBLIC_MATCHERS_GET = {\r\n            \"/produtos/**\",\r\n    };\r\n\r\n    private static final String[] PUBLIC_MATCHERS_POST = {\r\n            \"/clientes/**\",\r\n    };\r\n\r\n\r\n    @Override\r\n    protected void configure(HttpSecurity http) throws Exception {\r\n        http.cors().and().csrf().disable();\r\n        http.authorizeRequests()\r\n                .antMatchers(HttpMethod.POST ,  PUBLIC_MATCHERS_POST).permitAll()\r\n                .antMatchers(PUBLIC_MATCHERS).permitAll()\r\n                .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()\r\n                .anyRequest().authenticated();\r\n        http.addFilter(new JWTAuthenticationFilter(authenticationManager() , jwtUtil));\r\n        http.addFilter(new JWTAuthorizationFilter(authenticationManager() , jwtUtil , userDetailsService));\r\n        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);\r\n    }\r\n\r\n    @Override\r\n    public void configure(AuthenticationManagerBuilder auth) throws  Exception{\r\n        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());\r\n    }\r\n\r\n    @Bean\r\n   CorsConfigurationSource corsConfigurationSource(){\r\n        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();\r\n        source.registerCorsConfiguration(\"/**\" , new CorsConfiguration().applyPermitDefaultValues());\r\n        return source;\r\n    }\r\n\r\n    @Bean\r\n    public BCryptPasswordEncoder bCryptPasswordEncoder(){\r\n            return new BCryptPasswordEncoder();\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/config/SecurityConfig.java b/demo/src/main/java/com/example/demo/config/SecurityConfig.java
+--- a/demo/src/main/java/com/example/demo/config/SecurityConfig.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/config/SecurityConfig.java	(date 1627600938440)
+@@ -19,6 +19,8 @@
+ import org.springframework.web.cors.CorsConfigurationSource;
+ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+ 
++import java.util.Arrays;
++
+ @Configuration
+ @EnableWebSecurity
+ @EnableGlobalMethodSecurity(prePostEnabled = true)
+@@ -33,7 +35,9 @@
+     private static final String[] PUBLIC_MATCHERS = {
+             "/fornecedores/**",
+             "/categorias/**",
+-            "/clientes/**"
++            "/clientes/**",
++            "/feedback/**",
++            "/protocolo/**"
+     };
+ 
+     private static final String[] PUBLIC_MATCHERS_GET = {
+@@ -44,7 +48,6 @@
+             "/clientes/**",
+     };
+ 
+-
+     @Override
+     protected void configure(HttpSecurity http) throws Exception {
+         http.cors().and().csrf().disable();
+@@ -64,9 +67,11 @@
+     }
+ 
+     @Bean
+-   CorsConfigurationSource corsConfigurationSource(){
++    CorsConfigurationSource corsConfigurationSource() {
++        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
++        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+-        source.registerCorsConfiguration("/**" , new CorsConfiguration().applyPermitDefaultValues());
++        source.registerCorsConfiguration("/**", configuration);
+         return source;
+     }
+ 
+@@ -75,8 +80,4 @@
+             return new BCryptPasswordEncoder();
+     }
+ 
+-
+-
+-
+-
+ }
+Index: .idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml b/.idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml
+new file mode 100644
+--- /dev/null	(date 1632354622278)
++++ b/.idea/libraries/Maven__io_swagger_swagger_models_1_5_20.xml	(date 1632354622278)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.swagger:swagger-models:1.5.20">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-models/1.5.20/swagger-models-1.5.20.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-models/1.5.20/swagger-models-1.5.20-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-models/1.5.20/swagger-models-1.5.20-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml b/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml
+new file mode 100644
+--- /dev/null	(date 1632354622268)
++++ b/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_20.xml	(date 1632354622268)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: io.swagger:swagger-annotations:1.5.20">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-annotations/1.5.20/swagger-annotations-1.5.20.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-annotations/1.5.20/swagger-annotations-1.5.20-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/io/swagger/swagger-annotations/1.5.20/swagger-annotations-1.5.20-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__com_sun_mail_jakarta_mail_1_6_7.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__com_sun_mail_jakarta_mail_1_6_7.xml b/.idea/libraries/Maven__com_sun_mail_jakarta_mail_1_6_7.xml
+new file mode 100644
+--- /dev/null	(date 1625415329620)
++++ b/.idea/libraries/Maven__com_sun_mail_jakarta_mail_1_6_7.xml	(date 1625415329620)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: com.sun.mail:jakarta.mail:1.6.7">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/sun/mail/jakarta.mail/1.6.7/jakarta.mail-1.6.7.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/com/sun/mail/jakarta.mail/1.6.7/jakarta.mail-1.6.7-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/com/sun/mail/jakarta.mail/1.6.7/jakarta.mail-1.6.7-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/resources/ProdutoResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.resources;\r\n\r\nimport com.example.demo.domain.Produto;\r\nimport com.example.demo.dto.ProdutoDTO;\r\nimport com.example.demo.service.ProdutoService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.util.List;\r\n\r\n@RestController\r\n@RequestMapping(value=\"/produtos\")\r\n@CrossOrigin\r\npublic class ProdutoResource {\r\n\r\n    @Autowired\r\n    private ProdutoService service;\r\n\r\n    @RequestMapping(value=\"/{id}\", method=RequestMethod.GET)\r\n    public ResponseEntity<Produto> find(@PathVariable Long id) {\r\n        Produto obj = service.find(id);\r\n        return ResponseEntity.ok().body(obj);\r\n    }\r\n\r\n//    @RequestMapping(method= RequestMethod.GET)\r\n//    public ResponseEntity<Page<ProdutoDTO>> findPage(\r\n//            @RequestParam(value=\"nome\", defaultValue=\"\") String nome,\r\n//            @RequestParam(value=\"categorias\", defaultValue=\"\") String categorias,\r\n//            @RequestParam(value=\"page\", defaultValue=\"0\") Integer page,\r\n//            @RequestParam(value=\"linesPerPage\", defaultValue=\"24\") Integer linesPerPage,\r\n//            @RequestParam(value=\"orderBy\", defaultValue=\"nome\") String orderBy,\r\n//            @RequestParam(value=\"direction\", defaultValue=\"ASC\") String direction) {\r\n//        String nomeDecoded = URL.decodeParam(nome);\r\n//        List<Integer> ids = URL.decodeIntList(categorias);\r\n//        Page<Produto> list = service.search(nomeDecoded, ids, page, linesPerPage, orderBy, direction);\r\n//        Page<ProdutoDTO> listDto = list.map(obj -> new ProdutoDTO(obj));\r\n//        return ResponseEntity.ok().body(listDto);\r\n    }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/ProdutoResource.java b/demo/src/main/java/com/example/demo/resources/ProdutoResource.java
+--- a/demo/src/main/java/com/example/demo/resources/ProdutoResource.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/resources/ProdutoResource.java	(date 1632671459471)
+@@ -1,28 +1,25 @@
+ package com.example.demo.resources;
+ 
+ import com.example.demo.domain.Produto;
+-import com.example.demo.dto.ProdutoDTO;
+ import com.example.demo.service.ProdutoService;
+ import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.data.domain.Page;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
+ 
+-import java.util.List;
+-
+ @RestController
+-@RequestMapping(value="/produtos")
++@RequestMapping(value="produtos")
+ @CrossOrigin
+ public class ProdutoResource {
+ 
+     @Autowired
+     private ProdutoService service;
+ 
+-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
++    @GetMapping(value = "/{id}")
+     public ResponseEntity<Produto> find(@PathVariable Long id) {
+         Produto obj = service.find(id);
+         return ResponseEntity.ok().body(obj);
+     }
++}
+ 
+ //    @RequestMapping(method= RequestMethod.GET)
+ //    public ResponseEntity<Page<ProdutoDTO>> findPage(
+@@ -37,5 +34,5 @@
+ //        Page<Produto> list = service.search(nomeDecoded, ids, page, linesPerPage, orderBy, direction);
+ //        Page<ProdutoDTO> listDto = list.map(obj -> new ProdutoDTO(obj));
+ //        return ResponseEntity.ok().body(listDto);
+-    }
++//    }
+ 
+Index: .idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_1_2_0_RELEASE.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_1_2_0_RELEASE.xml b/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_1_2_0_RELEASE.xml
+new file mode 100644
+--- /dev/null	(date 1632354622313)
++++ b/.idea/libraries/Maven__org_springframework_plugin_spring_plugin_metadata_1_2_0_RELEASE.xml	(date 1632354622313)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-metadata/1.2.0.RELEASE/spring-plugin-metadata-1.2.0.RELEASE.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-metadata/1.2.0.RELEASE/spring-plugin-metadata-1.2.0.RELEASE-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/plugin/spring-plugin-metadata/1.2.0.RELEASE/spring-plugin-metadata-1.2.0.RELEASE-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/config/MailConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/config/MailConfig.java b/demo/src/main/java/com/example/demo/config/MailConfig.java
+new file mode 100644
+--- /dev/null	(date 1626647853766)
++++ b/demo/src/main/java/com/example/demo/config/MailConfig.java	(date 1626647853766)
+@@ -0,0 +1,40 @@
++package com.example.demo.config;
++
++import lombok.Data;
++import lombok.Getter;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.context.annotation.PropertySource;
++import org.springframework.core.env.Environment;
++import org.springframework.mail.javamail.JavaMailSender;
++import org.springframework.mail.javamail.JavaMailSenderImpl;
++import org.springframework.stereotype.Component;
++
++@Component
++@Getter
++public class MailConfig {
++
++    @Value("${spring.mail.host}")
++    private String host;
++
++    @Value("${spring.mail.port}")
++    private int port;
++
++    @Value("${spring.mail.username}")
++    private String username;
++
++    @Value("${spring.mail.password}")
++    private String password;
++
++//    @Autowired
++//    private Environment env;
++//
++//    public JavaMailSender mailSender(){
++//        JavaMailSender mailSender = new JavaMailSenderImpl();
++//
++////        mailSender.setHost(env.getProperty("mail.smpt.host"));
++//
++//        return mailSender;
++//    }
++}
+Index: demo/src/main/java/com/example/demo/domain/ProdutoCategoria.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\n\r\npublic class ProdutoCategoria {\r\n\r\n    Categoria categoria;\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/ProdutoCategoria.java b/demo/src/main/java/com/example/demo/domain/ProdutoCategoria.java
+--- a/demo/src/main/java/com/example/demo/domain/ProdutoCategoria.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/ProdutoCategoria.java	(date 1625012811759)
+@@ -1,9 +1,21 @@
+ package com.example.demo.domain;
+ 
++import javax.persistence.Entity;
++import javax.persistence.Id;
+ 
++@Entity
+ public class ProdutoCategoria {
+ 
+-    Categoria categoria;
++    @Id
++    private Long id;
+ 
+ 
++    public void setId(Long id) {
++        this.id = id;
++    }
++
++    @Id
++    public Long getId() {
++        return id;
++    }
+ }
+Index: .idea/libraries/Maven__org_springframework_spring_context_support_5_3_9.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_springframework_spring_context_support_5_3_9.xml b/.idea/libraries/Maven__org_springframework_spring_context_support_5_3_9.xml
+new file mode 100644
+--- /dev/null	(date 1626644967133)
++++ b/.idea/libraries/Maven__org_springframework_spring_context_support_5_3_9.xml	(date 1626644967133)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.springframework:spring-context-support:5.3.9">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context-support/5.3.9/spring-context-support-5.3.9.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context-support/5.3.9/spring-context-support-5.3.9-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context-support/5.3.9/spring-context-support-5.3.9-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__javax_mail_mail_1_4.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__javax_mail_mail_1_4.xml b/.idea/libraries/Maven__javax_mail_mail_1_4.xml
+new file mode 100644
+--- /dev/null	(date 1626644967125)
++++ b/.idea/libraries/Maven__javax_mail_mail_1_4.xml	(date 1626644967125)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: javax.mail:mail:1.4">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4/mail-1.4.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4/mail-1.4-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4/mail-1.4-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__javax_activation_activation_1_1.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__javax_activation_activation_1_1.xml b/.idea/libraries/Maven__javax_activation_activation_1_1.xml
+new file mode 100644
+--- /dev/null	(date 1626644967108)
++++ b/.idea/libraries/Maven__javax_activation_activation_1_1.xml	(date 1626644967108)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: javax.activation:activation:1.1">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/dto/FornecedorDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/dto/FornecedorDTO.java b/demo/src/main/java/com/example/demo/domain/dto/FornecedorDTO.java
+rename from demo/src/main/java/com/example/demo/dto/FornecedorDTO.java
+rename to demo/src/main/java/com/example/demo/domain/dto/FornecedorDTO.java
+--- a/demo/src/main/java/com/example/demo/dto/FornecedorDTO.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/dto/FornecedorDTO.java	(date 1632670245662)
+@@ -1,4 +1,4 @@
+-package com.example.demo.dto;
++package com.example.demo.domain.dto;
+ 
+ import com.example.demo.domain.Categoria;
+ import com.example.demo.domain.Fornecedor;
+@@ -32,8 +32,6 @@
+         fornecedor.setRazaoSocial(f.getRazaoSocial());
+         fornecedor.setNomeFantasma(f.getNomeFantasma());
+         fornecedor.setInscricao(f.getInscricao());
+-        fornecedor.setEmail(f.getEmail());
+-        fornecedor.setTelefone(f.getTelefone());
+         fornecedor.setCategoria(f.getCategoria());
+         return fornecedor;
+     }
+Index: demo/src/main/java/com/example/demo/repositories/CategoriaRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.repositories;\r\n\r\nimport com.example.demo.domain.Categoria;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\n@Repository\r\npublic interface CategoriaRepository extends JpaRepository<Categoria, Long> {\r\n\r\n    public Page<Categoria> findAllByNomeContains(Pageable pageable , String nome);\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/repositories/CategoriaRepository.java b/demo/src/main/java/com/example/demo/repositories/CategoriaRepository.java
+--- a/demo/src/main/java/com/example/demo/repositories/CategoriaRepository.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/repositories/CategoriaRepository.java	(date 1632790840110)
+@@ -9,8 +9,7 @@
+ @Repository
+ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+ 
+-    public Page<Categoria> findAllByNomeContains(Pageable pageable , String nome);
+-
++    Page<Categoria> findDistinctByNomeContains(Pageable pageable , String nome);
+ 
+ 
+ }
+Index: demo/src/main/java/com/example/demo/resources/FeedBackResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/FeedBackResource.java b/demo/src/main/java/com/example/demo/resources/FeedBackResource.java
+new file mode 100644
+--- /dev/null	(date 1626990665209)
++++ b/demo/src/main/java/com/example/demo/resources/FeedBackResource.java	(date 1626990665209)
+@@ -0,0 +1,54 @@
++package com.example.demo.resources;
++
++import com.example.demo.config.FeedBack;
++import com.example.demo.config.MailConfig;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.mail.SimpleMailMessage;
++import org.springframework.mail.javamail.JavaMailSenderImpl;
++import org.springframework.validation.BindingResult;
++import org.springframework.web.bind.annotation.PostMapping;
++import org.springframework.web.bind.annotation.RequestBody;
++import org.springframework.web.bind.annotation.RequestMapping;
++import org.springframework.web.bind.annotation.RestController;
++
++import javax.xml.bind.ValidationException;
++import java.util.Properties;
++
++@RestController
++@RequestMapping("/feedback")
++public class FeedBackResource {
++
++    @Autowired
++    private MailConfig mailConfig;
++
++    @PostMapping
++    public void sendFeedBack(@RequestBody FeedBack feedBack , BindingResult bindingResult) throws ValidationException {
++
++        if(bindingResult.hasErrors()){
++            throw new ValidationException("Feedback is not valid");
++        }
++
++        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
++        mailSender.setHost(this.mailConfig.getHost());
++        mailSender.setPort(this.mailConfig.getPort());
++        mailSender.setUsername(this.mailConfig.getUsername());
++        mailSender.setPassword(this.mailConfig.getPassword());
++
++        SimpleMailMessage mailMessage = new SimpleMailMessage();
++        mailMessage.setFrom(feedBack.getEmail());
++        mailMessage.setTo("vitor-bh@outlook.com");
++        mailMessage.setSubject("New feedback from " + feedBack.getName());
++        mailMessage.setText(feedBack.getFeedback());
++
++        Properties props = new Properties();
++        props.put("mail.transport.protocol", "smtp");
++        props.put("mail.smtp.auth", true);
++        props.put("mail.smtp.starttls.enable", true);
++        props.put("mail.smtp.connectiontimeout", 10000);
++
++        mailSender.setJavaMailProperties(props);
++
++        mailSender.send(mailMessage);
++    }
++
++}
+Index: demo/src/main/java/com/example/demo/config/FeedBack.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/config/FeedBack.java b/demo/src/main/java/com/example/demo/config/FeedBack.java
+new file mode 100644
+--- /dev/null	(date 1628901153626)
++++ b/demo/src/main/java/com/example/demo/config/FeedBack.java	(date 1628901153626)
+@@ -0,0 +1,23 @@
++package com.example.demo.config;
++
++import com.sun.istack.NotNull;
++import lombok.Data;
++
++import javax.validation.constraints.Email;
++import javax.validation.constraints.Min;
++
++@Data
++public class FeedBack {
++
++    @NotNull
++    private String name;
++
++    @NotNull
++    @Email
++    private String email;
++
++    @NotNull
++    @Min(10)
++    private String feedback;
++
++}
+Index: demo/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\nspring.jpa.database=POSTGRESQL\r\nspring.datasource.platform=postgres\r\nspring.datasource.url=jdbc:postgresql://localhost:5432/projeto\r\nspring.datasource.username=postgres\r\nspring.datasource.password=1234\r\nspring.jpa.show-sql=true\r\nspring.jpa.generate-ddl=true\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true\r\nserver.port=${port:8081}\r\n\r\njwt.secret=VitinGamePlays\r\njwt.expiration=60000\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/resources/application.properties b/demo/src/main/resources/application.properties
+--- a/demo/src/main/resources/application.properties	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/resources/application.properties	(date 1626648867606)
+@@ -12,3 +12,13 @@
+ 
+ jwt.secret=VitinGamePlays
+ jwt.expiration=60000
++
++
++default.sender=vitor-bh@outlook.com
++default.recipient=theanvilbr@gmail.com
++
++spring.mail.host=smtp.gmail.com
++spring.mail.port=587
++
++spring.mail.username=theanvilbr@gmail.com
++spring.mail.password=DMV159!@
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/domain/Pedido.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonFormat;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.Date;\r\nimport java.util.HashSet;\r\nimport java.util.Objects;\r\nimport java.util.Set;\r\n\r\n@Entity\r\npublic class Pedido  implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    @JsonFormat(pattern = \"dd/MM/yyyy HH:mm\")\r\n    private Date instante;\r\n\r\n\r\n    @OneToOne(cascade = CascadeType.ALL, mappedBy = \"pedido\")\r\n    private Pagamento pagamento;\r\n\r\n\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name=\"cliente_id\")\r\n    private Cliente cliente;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name=\"endereco_de_entrega\")\r\n    private Endereco enderecoDeEntrega;\r\n\r\n    @OneToMany(mappedBy = \"id.pedido\")\r\n    private Set<ItemPedido> itens = new HashSet<>();\r\n\r\n    public Pedido(){}\r\n\r\n    public Pedido(Long id, Date instante, Pagamento pagamento, Cliente cliente, Endereco enderecoDeEntrega) {\r\n        this.id = id;\r\n        this.instante = instante;\r\n        this.pagamento = pagamento;\r\n        this.cliente = cliente;\r\n        this.enderecoDeEntrega = enderecoDeEntrega;\r\n    }\r\n\r\n    public Set<ItemPedido> getItens() {\r\n        return itens;\r\n    }\r\n\r\n    public void setItens(Set<ItemPedido> itens) {\r\n        this.itens = itens;\r\n    }\r\n\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public Date getInstante() {\r\n        return instante;\r\n    }\r\n\r\n    public void setInstante(Date instante) {\r\n        this.instante = instante;\r\n    }\r\n\r\n    public Pagamento getPagamento() {\r\n        return pagamento;\r\n    }\r\n\r\n    public void setPagamento(Pagamento pagamento) {\r\n        this.pagamento = pagamento;\r\n    }\r\n\r\n    public Cliente getCliente() {\r\n        return cliente;\r\n    }\r\n\r\n    public void setCliente(Cliente cliente) {\r\n        this.cliente = cliente;\r\n    }\r\n\r\n    public Endereco getEnderecoDeEntrega() {\r\n        return enderecoDeEntrega;\r\n    }\r\n\r\n    public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {\r\n        this.enderecoDeEntrega = enderecoDeEntrega;\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Pedido pedido = (Pedido) o;\r\n        return id.equals(pedido.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Pedido.java b/demo/src/main/java/com/example/demo/domain/Pedido.java
+--- a/demo/src/main/java/com/example/demo/domain/Pedido.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Pedido.java	(date 1632012974460)
+@@ -21,12 +21,9 @@
+     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+     private Date instante;
+ 
+-
+     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
+     private Pagamento pagamento;
+ 
+-
+-
+     @ManyToOne
+     @JoinColumn(name="cliente_id")
+     private Cliente cliente;
+@@ -35,8 +32,8 @@
+     @JoinColumn(name="endereco_de_entrega")
+     private Endereco enderecoDeEntrega;
+ 
+-    @OneToMany(mappedBy = "id.pedido")
+-    private Set<ItemPedido> itens = new HashSet<>();
++//    @OneToMany(mappedBy = "id.pedido")
++//    private Set<ItemPedido> itens = new HashSet<>();
+ 
+     public Pedido(){}
+ 
+@@ -48,14 +45,13 @@
+         this.enderecoDeEntrega = enderecoDeEntrega;
+     }
+ 
+-    public Set<ItemPedido> getItens() {
+-        return itens;
+-    }
+-
+-    public void setItens(Set<ItemPedido> itens) {
+-        this.itens = itens;
+-    }
+-
++//    public Set<ItemPedido> getItens() {
++//        return itens;
++//    }
++//
++//    public void setItens(Set<ItemPedido> itens) {
++//        this.itens = itens;
++//    }
+ 
+     public Long getId() {
+         return id;
+Index: demo/src/main/java/com/example/demo/domain/Contato.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Contato.java b/demo/src/main/java/com/example/demo/domain/Contato.java
+new file mode 100644
+--- /dev/null	(date 1632086751149)
++++ b/demo/src/main/java/com/example/demo/domain/Contato.java	(date 1632086751149)
+@@ -0,0 +1,46 @@
++package com.example.demo.domain;
++
++import com.sun.istack.NotNull;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++
++import javax.persistence.*;
++import java.io.Serializable;
++import java.util.FormatterClosedException;
++
++@Getter
++@Entity
++@AllArgsConstructor
++@NoArgsConstructor
++public class Contato implements Serializable {
++
++    private static final long serialVersionUID = 1L;
++
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long id;
++
++    @Setter
++    @NotNull
++    private String nomeResponsavel;
++
++    @Setter
++    @NotNull
++    private String ddd;
++
++    @Setter
++    @NotNull
++    private String numero;
++
++    @Setter
++    @NotNull
++    private String email;
++
++    @ManyToOne
++    @JoinColumn(name="id_fornecedor")
++    private Fornecedor fornecedor;
++
++
++}
+Index: demo/src/main/java/com/example/demo/domain/Cidade.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonManagedReference;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.Objects;\r\n\r\n@Entity\r\npublic class Cidade implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n    private String nome;\r\n\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name=\"estado_id\")\r\n    private Estado estado;\r\n\r\n    public Cidade(){}\r\n\r\n    public Cidade(Long id, String nome, Estado estado) {\r\n        this.id = id;\r\n        this.nome = nome;\r\n        this.estado = estado;\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getNome() {\r\n        return nome;\r\n    }\r\n\r\n    public void setNome(String nome) {\r\n        this.nome = nome;\r\n    }\r\n\r\n    public Estado getEstado() {\r\n        return estado;\r\n    }\r\n\r\n    public void setEstado(Estado estado) {\r\n        this.estado = estado;\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Cidade cidade = (Cidade) o;\r\n        return Objects.equals(id, cidade.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n}\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Cidade.java b/demo/src/main/java/com/example/demo/domain/Cidade.java
+--- a/demo/src/main/java/com/example/demo/domain/Cidade.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Cidade.java	(date 1631754911172)
+@@ -1,11 +1,13 @@
+ package com.example.demo.domain;
+ 
+ import com.fasterxml.jackson.annotation.JsonManagedReference;
++import lombok.Getter;
+ 
+ import javax.persistence.*;
+ import java.io.Serializable;
+ import java.util.Objects;
+ 
++@Getter
+ @Entity
+ public class Cidade implements Serializable {
+ 
+@@ -16,7 +18,6 @@
+     private Long id;
+     private String nome;
+ 
+-
+     @ManyToOne
+     @JoinColumn(name="estado_id")
+     private Estado estado;
+@@ -29,31 +30,6 @@
+         this.estado = estado;
+     }
+ 
+-    public Long getId() {
+-        return id;
+-    }
+-
+-    public void setId(Long id) {
+-        this.id = id;
+-    }
+-
+-    public String getNome() {
+-        return nome;
+-    }
+-
+-    public void setNome(String nome) {
+-        this.nome = nome;
+-    }
+-
+-    public Estado getEstado() {
+-        return estado;
+-    }
+-
+-    public void setEstado(Estado estado) {
+-        this.estado = estado;
+-    }
+-
+-
+     @Override
+     public boolean equals(Object o) {
+         if (this == o) return true;
+Index: demo/src/main/java/com/example/demo/service/CategoriaServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.service;\r\n\r\nimport com.example.demo.domain.Categoria;\r\nimport com.example.demo.repositories.CategoriaRepository;\r\nimport com.example.demo.service.execptions.DataIntegrityException;\r\nimport com.example.demo.service.execptions.ObjectNotFoundException;\r\nimport com.example.demo.service.interfaces.CategoriaService;\r\nimport com.sun.javafx.scene.traversal.Direction;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.dao.DataIntegrityViolationException;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.PageRequest;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport javax.persistence.EntityNotFoundException;\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n@Service\r\npublic class CategoriaServiceImpl implements CategoriaService {\r\n\r\n    @Autowired\r\n    CategoriaRepository categoriaRepository;\r\n\r\n    public List<Categoria> findAll(){ return categoriaRepository.findAll();\r\n    }\r\n\r\n  public Categoria findByID(Long id) {\r\n      Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);\r\n      if (categoriaOptional.isPresent()){\r\n          return categoriaOptional.get();\r\n      }\r\n      throw new EntityNotFoundException(\"Objeto não encontrado! Id\" + id + \" , Tipo :\" + Categoria.class.getName());\r\n  }\r\n\r\n    public Categoria save(Categoria categoria){\r\n      categoria.setId(null);\r\n      return categoriaRepository.save(categoria);\r\n    }\r\n\r\n    public Categoria update(Categoria obj){\r\n        return categoriaRepository.save(obj);\r\n    }\r\n\r\n    public void delete(Long id){\r\n        categoriaRepository.deleteById(id);\r\n    }\r\n\r\n    public Page<Categoria> findPage(Pageable page) {\r\n        return categoriaRepository.findAll(page);\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/service/CategoriaServiceImpl.java b/demo/src/main/java/com/example/demo/service/CategoriaServiceImpl.java
+--- a/demo/src/main/java/com/example/demo/service/CategoriaServiceImpl.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/service/CategoriaServiceImpl.java	(date 1632790840102)
+@@ -11,6 +11,7 @@
+ import org.springframework.data.domain.Page;
+ import org.springframework.data.domain.PageRequest;
+ import org.springframework.data.domain.Pageable;
++import org.springframework.data.domain.Sort;
+ import org.springframework.stereotype.Service;
+ 
+ import javax.persistence.EntityNotFoundException;
+@@ -20,11 +21,13 @@
+ @Service
+ public class CategoriaServiceImpl implements CategoriaService {
+ 
+-    @Autowired
+-    CategoriaRepository categoriaRepository;
++    private final CategoriaRepository categoriaRepository;
+ 
+-    public List<Categoria> findAll(){ return categoriaRepository.findAll();
++    public CategoriaServiceImpl(CategoriaRepository categoriaRepository) {
++        this.categoriaRepository = categoriaRepository;
+     }
++
++    public List<Categoria> findAll() { return categoriaRepository.findAll(); }
+ 
+   public Categoria findByID(Long id) {
+       Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
+@@ -39,16 +42,15 @@
+       return categoriaRepository.save(categoria);
+     }
+ 
+-    public Categoria update(Categoria obj){
+-        return categoriaRepository.save(obj);
+-    }
++    public Categoria update(Categoria obj){ return categoriaRepository.save(obj); }
+ 
+-    public void delete(Long id){
+-        categoriaRepository.deleteById(id);
+-    }
++    public void delete(Long id){ categoriaRepository.deleteById(id); }
+ 
+-    public Page<Categoria> findPage(Pageable page) {
+-        return categoriaRepository.findAll(page);
++    //    public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy, String direction) {
++
++    public Page<Categoria> findPage(String nome, Integer page, Integer linesPerPage, String orderBy, String direction) {
++       PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
++       return categoriaRepository.findDistinctByNomeContains(pageRequest , nome );
+     }
+ 
+ 
+Index: demo/src/main/java/com/example/demo/service/ProtocoloService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/service/ProtocoloService.java b/demo/src/main/java/com/example/demo/service/ProtocoloService.java
+new file mode 100644
+--- /dev/null	(date 1625878574365)
++++ b/demo/src/main/java/com/example/demo/service/ProtocoloService.java	(date 1625878574365)
+@@ -0,0 +1,48 @@
++package com.example.demo.service;
++
++import com.example.demo.domain.Fornecedor;
++import com.example.demo.domain.Protocolo;
++import com.example.demo.repositories.ProtocoloRepository;
++import com.example.demo.service.execptions.ObjectNotFoundException;
++import com.example.demo.service.interfaces.Crud;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++
++import java.util.List;
++
++@Service
++public class ProtocoloService implements Crud<Long , Protocolo> {
++
++    @Autowired
++    private ProtocoloRepository protocoloRepository;
++
++    @Override
++    public List<Protocolo> findAll() {
++       return protocoloRepository.findAll() ;
++    }
++
++    @Override
++    public Protocolo findByID(Long aLong) {
++        Protocolo protocolo = protocoloRepository.findById(aLong).get();
++        if(protocolo == null){
++            throw new ObjectNotFoundException("Objeto não encontrado! Id" + aLong + " , Tipo :" + Fornecedor.class.getName());
++        }
++        return protocolo;
++    }
++
++    @Override
++    public Protocolo save(Protocolo entity) {
++      return protocoloRepository.save(entity);
++    }
++
++    @Override
++    public Protocolo update(Protocolo protocolo) {
++        findByID(protocolo.getId());
++        return null;
++    }
++
++    @Override
++    public void delete(Long aLong) {
++        protocoloRepository.deleteById(aLong);
++    }
++}
+Index: demo/src/main/java/com/example/demo/repositories/ProtocoloRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/repositories/ProtocoloRepository.java b/demo/src/main/java/com/example/demo/repositories/ProtocoloRepository.java
+new file mode 100644
+--- /dev/null	(date 1625877792254)
++++ b/demo/src/main/java/com/example/demo/repositories/ProtocoloRepository.java	(date 1625877792254)
+@@ -0,0 +1,7 @@
++package com.example.demo.repositories;
++
++import com.example.demo.domain.Protocolo;
++import org.springframework.data.jpa.repository.JpaRepository;
++
++public interface ProtocoloRepository  extends JpaRepository<Protocolo , Long> {
++}
+Index: demo/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n\txsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n\t<modelVersion>4.0.0</modelVersion>\r\n\t<parent>\r\n\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t<artifactId>spring-boot-starter-parent</artifactId>\r\n\t\t<version>2.4.5</version>\r\n\t\t<relativePath/> <!-- lookup parent from repository -->\r\n\t</parent>\r\n\t<groupId>com.example</groupId>\r\n\t<artifactId>demo</artifactId>\r\n\t<version>0.0.1-SNAPSHOT</version>\r\n\t<name>demo</name>\r\n\t<description>Demo project for Spring Boot</description>\r\n\t<properties>\r\n\t\t<java.version>1.8</java.version>\r\n\t</properties>\r\n\t<dependencies>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-data-jpa</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-security</artifactId>\r\n\t\t\t<version>2.5.1</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-validation</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-web</artifactId>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>io.jsonwebtoken</groupId>\r\n\t\t\t<artifactId>jjwt</artifactId>\r\n\t\t\t<version>0.9.1</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.security</groupId>\r\n\t\t\t<artifactId>spring-security-core</artifactId>\r\n\t\t\t<version>5.5.1</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>net.sf.jasperreports</groupId>\r\n\t\t\t<artifactId>jasperreports</artifactId>\r\n\t\t\t<version>6.17.0</version>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.postgresql</groupId>\r\n\t\t\t<artifactId>postgresql</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t</dependency>\r\n\t</dependencies>\r\n\r\n\t<build>\r\n\t\t<plugins>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t\t<artifactId>spring-boot-maven-plugin</artifactId>\r\n\t\t\t</plugin>\r\n\t\t</plugins>\r\n\t</build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/pom.xml b/demo/pom.xml
+--- a/demo/pom.xml	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/pom.xml	(date 1632354572757)
+@@ -23,9 +23,31 @@
+ 		</dependency>
+ 		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-mail</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.projectlombok</groupId>
++			<artifactId>lombok</artifactId>
++			<version>1.18.20</version>
++			<scope>provided</scope>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-security</artifactId>
+ 			<version>2.5.1</version>
+ 		</dependency>
++		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
++		<dependency>
++			<groupId>javax.mail</groupId>
++			<artifactId>mail</artifactId>
++			<version>1.4</version>
++		</dependency>
++		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
++		<dependency>
++			<groupId>org.springframework</groupId>
++			<artifactId>spring-context-support</artifactId>
++			<version>5.3.9</version>
++		</dependency>
+ 		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-validation</artifactId>
+@@ -48,6 +70,11 @@
+ 			<groupId>net.sf.jasperreports</groupId>
+ 			<artifactId>jasperreports</artifactId>
+ 			<version>6.17.0</version>
++		</dependency>
++		<dependency>
++			<groupId>io.springfox</groupId>
++			<artifactId>springfox-swagger2</artifactId>
++			<version>2.9.2</version>
+ 		</dependency>
+ 		<dependency>
+ 			<groupId>org.postgresql</groupId>
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <annotationProcessing>\r\n      <profile name=\"Maven default annotation processors profile\" enabled=\"true\">\r\n        <sourceOutputDir name=\"target/generated-sources/annotations\" />\r\n        <sourceTestOutputDir name=\"target/generated-test-sources/test-annotations\" />\r\n        <outputRelativeToContentRoot value=\"true\" />\r\n        <module name=\"demo\" />\r\n      </profile>\r\n    </annotationProcessing>\r\n    <bytecodeTargetLevel>\r\n      <module name=\"demo\" target=\"1.8\" />\r\n    </bytecodeTargetLevel>\r\n  </component>\r\n  <component name=\"JavacSettings\">\r\n    <option name=\"ADDITIONAL_OPTIONS_OVERRIDE\">\r\n      <module name=\"demo\" options=\"-parameters\" />\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/.idea/compiler.xml	(date 1625877593999)
+@@ -2,6 +2,7 @@
+ <project version="4">
+   <component name="CompilerConfiguration">
+     <annotationProcessing>
++      <profile default="true" name="Default" enabled="true" />
+       <profile name="Maven default annotation processors profile" enabled="true">
+         <sourceOutputDir name="target/generated-sources/annotations" />
+         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+Index: demo/src/main/java/com/example/demo/resources/PedidoResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.resources;\r\n\r\n\r\nimport com.example.demo.domain.Pedido;\r\nimport com.example.demo.service.PedidoService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\n\r\n@RequestMapping(value = \"/pedidos\")\r\npublic class PedidoResource {\r\n\r\n    @Autowired\r\n    private PedidoService pedidoService;\r\n\r\n\r\n    @GetMapping\r\n    @RequestMapping(value = \"/{id}\")\r\n    public ResponseEntity<Pedido> findByID(@PathVariable Long id){\r\n        Pedido pedido = pedidoService.findByID(id);\r\n        return ResponseEntity.ok().body(pedido);\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/PedidoResource.java b/demo/src/main/java/com/example/demo/resources/PedidoResource.java
+--- a/demo/src/main/java/com/example/demo/resources/PedidoResource.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/resources/PedidoResource.java	(date 1632352107807)
+@@ -15,9 +15,7 @@
+     @Autowired
+     private PedidoService pedidoService;
+ 
+-
+-    @GetMapping
+-    @RequestMapping(value = "/{id}")
++    @GetMapping( value = "/{id}")
+     public ResponseEntity<Pedido> findByID(@PathVariable Long id){
+         Pedido pedido = pedidoService.findByID(id);
+         return ResponseEntity.ok().body(pedido);
+Index: demo/src/main/java/com/example/demo/domain/Endereco.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.domain;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\n\r\nimport javax.persistence.*;\r\nimport java.io.Serializable;\r\nimport java.util.Objects;\r\n\r\n@Entity\r\npublic class Endereco implements Serializable {\r\n\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private String logradouro;\r\n    private String numero;\r\n    private String complemento;\r\n    private String bairro;\r\n    private String cep;\r\n\r\n    @JsonIgnore\r\n    @ManyToOne\r\n    @JoinColumn(name=\"cliente_id\")\r\n    private Cliente cliente;\r\n\r\n    @ManyToOne\r\n    @JoinColumn (name = \"cidade_id\")\r\n    private Cidade cidade;\r\n\r\n    public Endereco(){}\r\n\r\n    public Endereco(Long id, String logradouro, String numero, String complemento, String bairro, String cep, Cliente cliente ,Cidade cidade ,Fornecedor fornecedor ) {\r\n        this.id = id;\r\n        this.logradouro = logradouro;\r\n        this.numero = numero;\r\n        this.complemento = complemento;\r\n        this.bairro = bairro;\r\n        this.cep = cep;\r\n        this.cidade = cidade;\r\n        this.cliente = cliente;\r\n    }\r\n\r\n    public Cliente getCliente() {\r\n        return cliente;\r\n    }\r\n\r\n    public void setCliente(Cliente cliente) {\r\n        this.cliente = cliente;\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getLogradouro() {\r\n        return logradouro;\r\n    }\r\n\r\n    public void setLogradouro(String logradouro) {\r\n        this.logradouro = logradouro;\r\n    }\r\n\r\n    public String getNumero() {\r\n        return numero;\r\n    }\r\n\r\n    public void setNumero(String numero) {\r\n        this.numero = numero;\r\n    }\r\n\r\n    public String getComplemento() {\r\n        return complemento;\r\n    }\r\n\r\n    public void setComplemento(String complemento) {\r\n        this.complemento = complemento;\r\n    }\r\n\r\n    public String getBairro() {\r\n        return bairro;\r\n    }\r\n\r\n    public void setBairro(String bairro) {\r\n        this.bairro = bairro;\r\n    }\r\n\r\n    public String getCep() {\r\n        return cep;\r\n    }\r\n\r\n    public void setCep(String cep) {\r\n        this.cep = cep;\r\n    }\r\n\r\n    public Cidade getCidade() {\r\n        return cidade;\r\n    }\r\n\r\n    public void setCidade(Cidade cidade) {\r\n        this.cidade = cidade;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Endereco endereco = (Endereco) o;\r\n        return Objects.equals(id, endereco.id);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/domain/Endereco.java b/demo/src/main/java/com/example/demo/domain/Endereco.java
+--- a/demo/src/main/java/com/example/demo/domain/Endereco.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/Endereco.java	(date 1632104420969)
+@@ -15,41 +15,41 @@
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
+ 
++    private String codigo;
+     private String logradouro;
+     private String numero;
+     private String complemento;
+     private String bairro;
+     private String cep;
+-
+-    @JsonIgnore
+-    @ManyToOne
+-    @JoinColumn(name="cliente_id")
+-    private Cliente cliente;
+-
+-    @ManyToOne
+-    @JoinColumn (name = "cidade_id")
+-    private Cidade cidade;
++//    @JsonIgnore
++//    @ManyToOne
++//    @JoinColumn(name="cliente_id")
++//    private Cliente cliente;
++//
++//    @ManyToOne
++//    @JoinColumn (name = "cidade_id")
++//    private Cidade cidade;
+ 
+     public Endereco(){}
+ 
+-    public Endereco(Long id, String logradouro, String numero, String complemento, String bairro, String cep, Cliente cliente ,Cidade cidade ,Fornecedor fornecedor ) {
++    public Endereco(Long id, String logradouro, String numero, String complemento, String bairro, String cep ) {
+         this.id = id;
+         this.logradouro = logradouro;
+         this.numero = numero;
+         this.complemento = complemento;
+         this.bairro = bairro;
+         this.cep = cep;
+-        this.cidade = cidade;
+-        this.cliente = cliente;
+-    }
+-
+-    public Cliente getCliente() {
+-        return cliente;
++//        this.cidade = cidade;
++//        this.cliente = cliente;
+     }
+ 
+-    public void setCliente(Cliente cliente) {
+-        this.cliente = cliente;
+-    }
++//    public Cliente getCliente() {
++//        return cliente;
++//    }
++//
++//    public void setCliente(Cliente cliente) {
++//        this.cliente = cliente;
++//    }
+ 
+     public Long getId() {
+         return id;
+@@ -99,13 +99,13 @@
+         this.cep = cep;
+     }
+ 
+-    public Cidade getCidade() {
+-        return cidade;
+-    }
+-
+-    public void setCidade(Cidade cidade) {
+-        this.cidade = cidade;
+-    }
++//    public Cidade getCidade() {
++//        return cidade;
++//    }
++//
++//    public void setCidade(Cidade cidade) {
++//        this.cidade = cidade;
++//    }
+ 
+     @Override
+     public boolean equals(Object o) {
+Index: demo/src/main/java/com/example/demo/dto/CategoriaDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/dto/CategoriaDTO.java b/demo/src/main/java/com/example/demo/domain/dto/CategoriaDTO.java
+rename from demo/src/main/java/com/example/demo/dto/CategoriaDTO.java
+rename to demo/src/main/java/com/example/demo/domain/dto/CategoriaDTO.java
+--- a/demo/src/main/java/com/example/demo/dto/CategoriaDTO.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/dto/CategoriaDTO.java	(date 1632670245677)
+@@ -1,4 +1,4 @@
+-package com.example.demo.dto;
++package com.example.demo.domain.dto;
+ 
+ import com.example.demo.domain.Categoria;
+ 
+Index: demo/src/main/java/com/example/demo/resources/ProtocoloResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/ProtocoloResource.java b/demo/src/main/java/com/example/demo/resources/ProtocoloResource.java
+new file mode 100644
+--- /dev/null	(date 1632363339144)
++++ b/demo/src/main/java/com/example/demo/resources/ProtocoloResource.java	(date 1632363339144)
+@@ -0,0 +1,49 @@
++package com.example.demo.resources;
++
++import com.example.demo.domain.Protocolo;
++import com.example.demo.service.ProtocoloService;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.*;
++import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
++
++import java.net.URI;
++import java.util.List;
++
++@RestController
++@RequestMapping(value="protocolo")
++public class ProtocoloResource {
++
++    @Autowired
++    private ProtocoloService service;
++
++    @GetMapping
++    public ResponseEntity<List<Protocolo>> findAll() {
++        return ResponseEntity.ok().body(service.findAll());
++    }
++
++    @GetMapping( value= "/{id}" )
++    public ResponseEntity<Protocolo> findByID(@PathVariable Long id ){
++        Protocolo protocolo = service.findByID(id);
++        return ResponseEntity.ok().body(protocolo);
++    }
++
++    @PostMapping
++    public ResponseEntity<Void> save(@RequestBody Protocolo protocolo){
++        protocolo = service.save(protocolo);
++        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(protocolo.getId()).toUri();
++        return ResponseEntity.created(uri).build();
++    }
++
++    @PutMapping(value =  "/{id")
++    public ResponseEntity<Void> update(@RequestBody Protocolo protocolo , @PathVariable Long id){
++        protocolo.setId(id);
++        service.update(protocolo);
++        return ResponseEntity.noContent().build();
++    }
++
++    @DeleteMapping(value = "/{id}")
++    public void delete(@PathVariable Long id ){
++        service.delete(id);
++    }
++}
+Index: .idea/libraries/Maven__org_projectlombok_lombok_1_18_20.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Maven__org_projectlombok_lombok_1_18_20.xml b/.idea/libraries/Maven__org_projectlombok_lombok_1_18_20.xml
+new file mode 100644
+--- /dev/null	(date 1625877334333)
++++ b/.idea/libraries/Maven__org_projectlombok_lombok_1_18_20.xml	(date 1625877334333)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.projectlombok:lombok:1.18.20">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: demo/src/main/java/com/example/demo/DemoApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo;\r\n\r\nimport org.springframework.boot.CommandLineRunner;\r\nimport org.springframework.boot.SpringApplication;\r\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\r\n\r\n@SpringBootApplication\r\npublic class DemoApplication implements CommandLineRunner {\r\n\r\n\tpublic static void main(String[] args) {\r\n\t\tSpringApplication.run(DemoApplication.class, args);\r\n\t}\r\n\r\n\r\n\r\n\t@Override\r\n\tpublic void run(String... args) throws Exception {\r\n\r\n\t}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/DemoApplication.java b/demo/src/main/java/com/example/demo/DemoApplication.java
+--- a/demo/src/main/java/com/example/demo/DemoApplication.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/DemoApplication.java	(date 1625012439151)
+@@ -11,8 +11,6 @@
+ 		SpringApplication.run(DemoApplication.class, args);
+ 	}
+ 
+-
+-
+ 	@Override
+ 	public void run(String... args) throws Exception {
+ 
+Index: demo/src/main/java/com/example/demo/dto/ProdutoDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/dto/ProdutoDTO.java b/demo/src/main/java/com/example/demo/domain/dto/ProdutoDTO.java
+rename from demo/src/main/java/com/example/demo/dto/ProdutoDTO.java
+rename to demo/src/main/java/com/example/demo/domain/dto/ProdutoDTO.java
+--- a/demo/src/main/java/com/example/demo/dto/ProdutoDTO.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/dto/ProdutoDTO.java	(date 1632670245690)
+@@ -1,4 +1,4 @@
+-package com.example.demo.dto;
++package com.example.demo.domain.dto;
+ 
+ import com.example.demo.domain.Categoria;
+ 
+Index: demo/src/main/java/com/example/demo/config/Validation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/config/Validation.java b/demo/src/main/java/com/example/demo/config/Validation.java
+new file mode 100644
+--- /dev/null	(date 1625875141384)
++++ b/demo/src/main/java/com/example/demo/config/Validation.java	(date 1625875141384)
+@@ -0,0 +1,5 @@
++package com.example.demo.config;
++
++public class Validation {
++
++}
+Index: demo/src/main/java/com/example/demo/resources/FornecedorResource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.resources;\r\n\r\nimport com.example.demo.domain.Fornecedor;\r\nimport com.example.demo.dto.FornecedorDTO;\r\nimport com.example.demo.repositories.FornecedorRepository;\r\nimport com.example.demo.service.FornecedorService;\r\nimport com.example.demo.service.ReportService;\r\nimport net.sf.jasperreports.engine.JRException;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.data.jpa.repository.Query;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport org.springframework.web.servlet.support.ServletUriComponentsBuilder;\r\n\r\nimport java.io.FileNotFoundException;\r\nimport java.io.IOException;\r\nimport java.net.URI;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\n@RestController\r\n@RequestMapping(value = \"fornecedores\")\r\n@CrossOrigin\r\npublic class FornecedorResource {\r\n\r\n    @Autowired\r\n    private FornecedorService fornecedorService;\r\n\r\n    @Autowired\r\n    private ReportService service;\r\n\r\n    @Autowired\r\n    private FornecedorRepository repository;\r\n\r\n    @GetMapping\r\n    public List<Fornecedor> findAll() {\r\n        return fornecedorService.findAll();\r\n    }\r\n\r\n    @RequestMapping(value = \"/{id}\", method = RequestMethod.GET)\r\n    public ResponseEntity<Fornecedor> findByID(@PathVariable Long id) {\r\n        Fornecedor fornecedor = fornecedorService.findByID(id);\r\n        return ResponseEntity.ok().body(fornecedor);\r\n    }\r\n\r\n    @PostMapping\r\n    @CrossOrigin\r\n    public ResponseEntity<Void> save(@RequestBody Fornecedor fornecedor){\r\n        fornecedor = fornecedorService.save(fornecedor);\r\n        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path(\"/{id}\").buildAndExpand(fornecedor.getId()).toUri();\r\n        return  ResponseEntity.created(uri).build();\r\n    }\r\n\r\n    @RequestMapping(value=\"/{id}\" , method=RequestMethod.PUT)\r\n    public ResponseEntity<Void> update(@RequestBody Fornecedor obj , @PathVariable Long id){\r\n        obj.setId(id);\r\n        obj = fornecedorService.update(obj);\r\n        return ResponseEntity.noContent().build();\r\n    }\r\n\r\n    @RequestMapping(value=\"/{id}\" , method=RequestMethod.DELETE)\r\n    // public ResponseEntity<Void> delete(@PathVariable Long id)\r\n    public void delete(@PathVariable Long id){\r\n        fornecedorService.delete(id);\r\n//        return ResponseEntity.noContent().build();\r\n    }\r\n\r\n    @GetMapping(\"/filtro\")\r\n    public List<FornecedorDTO> findFornecedorRazaoSocial (@RequestParam(\"razaoSocial\") String razaoSocial){\r\n        return repository.findByRazaoSocialContains(razaoSocial)\r\n                .stream()\r\n                .map(FornecedorDTO::converter).collect(Collectors.toList());\r\n    }\r\n\r\n    @RequestMapping(value=\"/relatorio/{format}/{id}\" , method=RequestMethod.GET)\r\n    public String generateReportById(@PathVariable String format ,@PathVariable Long id) throws FileNotFoundException, JRException{\r\n        return service.exportReport(format, id );\r\n\r\n    }\r\n\r\n    @RequestMapping(value=\"/relatorios/{format}\" , method=RequestMethod.GET)\r\n    public String gerarRelatorioAll(@PathVariable String format , Long id) throws FileNotFoundException, JRException{\r\n        return service.exportReport(format , id);\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/resources/FornecedorResource.java b/demo/src/main/java/com/example/demo/resources/FornecedorResource.java
+--- a/demo/src/main/java/com/example/demo/resources/FornecedorResource.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/resources/FornecedorResource.java	(date 1632670245704)
+@@ -1,19 +1,17 @@
+ package com.example.demo.resources;
+ 
+ import com.example.demo.domain.Fornecedor;
+-import com.example.demo.dto.FornecedorDTO;
++import com.example.demo.domain.dto.FornecedorDTO;
+ import com.example.demo.repositories.FornecedorRepository;
+ import com.example.demo.service.FornecedorService;
+ import com.example.demo.service.ReportService;
+ import net.sf.jasperreports.engine.JRException;
+ import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.data.jpa.repository.Query;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
+ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+ 
+ import java.io.FileNotFoundException;
+-import java.io.IOException;
+ import java.net.URI;
+ import java.util.List;
+ import java.util.stream.Collectors;
+@@ -37,32 +35,30 @@
+         return fornecedorService.findAll();
+     }
+ 
+-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
++    @GetMapping(value = "/{id}" )
+     public ResponseEntity<Fornecedor> findByID(@PathVariable Long id) {
+         Fornecedor fornecedor = fornecedorService.findByID(id);
+         return ResponseEntity.ok().body(fornecedor);
+     }
+ 
+     @PostMapping
+-    @CrossOrigin
+     public ResponseEntity<Void> save(@RequestBody Fornecedor fornecedor){
+         fornecedor = fornecedorService.save(fornecedor);
+         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(fornecedor.getId()).toUri();
+         return  ResponseEntity.created(uri).build();
+     }
+ 
+-    @RequestMapping(value="/{id}" , method=RequestMethod.PUT)
++    @PutMapping( value="/{id}" )
+     public ResponseEntity<Void> update(@RequestBody Fornecedor obj , @PathVariable Long id){
+         obj.setId(id);
+         obj = fornecedorService.update(obj);
+         return ResponseEntity.noContent().build();
+     }
+ 
+-    @RequestMapping(value="/{id}" , method=RequestMethod.DELETE)
+-    // public ResponseEntity<Void> delete(@PathVariable Long id)
+-    public void delete(@PathVariable Long id){
++    @DeleteMapping(value="/{id}")
++    public ResponseEntity<Void> delete(@PathVariable Long id){
+         fornecedorService.delete(id);
+-//        return ResponseEntity.noContent().build();
++        return ResponseEntity.noContent().build();
+     }
+ 
+     @GetMapping("/filtro")
+@@ -72,13 +68,13 @@
+                 .map(FornecedorDTO::converter).collect(Collectors.toList());
+     }
+ 
+-    @RequestMapping(value="/relatorio/{format}/{id}" , method=RequestMethod.GET)
++    @GetMapping(value="/relatorio/{format}/{id}" )
+     public String generateReportById(@PathVariable String format ,@PathVariable Long id) throws FileNotFoundException, JRException{
+         return service.exportReport(format, id );
+ 
+     }
+ 
+-    @RequestMapping(value="/relatorios/{format}" , method=RequestMethod.GET)
++    @GetMapping(value="/relatorios/{format}" )
+     public String gerarRelatorioAll(@PathVariable String format , Long id) throws FileNotFoundException, JRException{
+         return service.exportReport(format , id);
+ 
+Index: demo/src/main/java/com/example/demo/dto/CredenciaisDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/demo/src/main/java/com/example/demo/dto/CredenciaisDTO.java b/demo/src/main/java/com/example/demo/domain/dto/CredenciaisDTO.java
+rename from demo/src/main/java/com/example/demo/dto/CredenciaisDTO.java
+rename to demo/src/main/java/com/example/demo/domain/dto/CredenciaisDTO.java
+--- a/demo/src/main/java/com/example/demo/dto/CredenciaisDTO.java	(revision 8c03514e48344c8c79339f320511e4c423cb7384)
++++ b/demo/src/main/java/com/example/demo/domain/dto/CredenciaisDTO.java	(date 1632670245697)
+@@ -1,4 +1,4 @@
+-package com.example.demo.dto;
++package com.example.demo.domain.dto;
+ 
+ import java.io.Serializable;
+ 
+@@ -10,22 +10,21 @@
+     private String senha;
+ 
+     public CredenciaisDTO(){
+-
+     }
+ 
+-    public String getEmail(){
++    public String getEmail() {
+         return email;
+     }
+ 
+-    public void setEmail(String email){
++    public void setEmail(String email) {
+         this.email = email;
+     }
+ 
+-    public String getSenha(){
++    public String getSenha() {
+         return senha;
+     }
+ 
+-    public void setSenha(String senha){
+-        this.email = email;
++    public void setSenha(String senha) {
++        this.senha = senha;
+     }
+ }
