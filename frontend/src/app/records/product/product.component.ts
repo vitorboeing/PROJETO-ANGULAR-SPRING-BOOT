@@ -30,8 +30,7 @@ export class ProductComponent implements OnInit {
 
     rowsPerPageOptions = [5, 10, 20];
 
-    constructor(private productService: ProductService, private messageService: MessageService,
-                private confirmationService: ConfirmationService) {}
+    constructor(private productService: ProductService, private messageService: MessageService) {}
 
     ngOnInit() {
         this.productService.getAll().subscribe(data => this.products = data);

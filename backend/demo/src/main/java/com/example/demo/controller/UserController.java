@@ -10,18 +10,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("user")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @GetMapping("/info")
-    public User getUserDetails(){
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping()
+    public User getUserDetails() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByEmail(email).get();
     }
 
-//    @PutMapping
-//    public changeTheme(@PathVariable Long id , @RequestParam Boolean themeDark){
-//
-//    }
+    @PutMapping
+    public void updateThemeDark(@RequestBody User user) {
+        userRepository.save(user);
+    }
 
 }

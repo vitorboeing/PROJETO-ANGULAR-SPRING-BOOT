@@ -12,10 +12,10 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="providers" [columns]="cols" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['code' ,'name']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProviders" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="providers" [columns]="cols" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['code' ,'name']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [(selection)]="selectedProviders" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left ">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                         </span>
@@ -23,23 +23,23 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th ><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
-                        <th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
-                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                        <th></th>
+                        <th style="width:5%; text-align: center;"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                        <th style="width:25%;" pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
+                        <th style="width:55%;" pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th style="width:5%; "></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-provider>
                     <tr (dblclick))="edit(provider)">
-                        <td style="width:5%; min-width:2rem;"><p-tableCheckbox [value]="provider"></p-tableCheckbox></td>
-                        <td style="width:25%; min-width:10rem;"><span class="p-column-title">Code</span>
+                        <td style="width:5%; text-align: center;"><p-tableCheckbox [value]="provider"></p-tableCheckbox></td>
+                        <td style="width:25%;" pSortableColumn="code"><span class="p-column-title">Code</span>
                             {{provider.code || provider.id}}
                         </td>
-                        <td style="width:55%; min-width:10rem;">
+                        <td style="width:55%;" pSortableColumn="name">
                             <span class="p-column-title">Name</span>
                             {{provider.name}}
                         </td>
-                        <td style="width:15%; min-width:4rem;">
+                        <td style="width:5%;">
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded mr-2" (click)="edit(provider)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="openDeleteModal(provider)"></button>

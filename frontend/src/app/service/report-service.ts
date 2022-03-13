@@ -10,16 +10,15 @@ export class ReportService {
 
     API_URL = environment.API + "/report";
 
-    constructor(protected http: HttpClient) {
-    }
+    constructor(protected http: HttpClient) { }
 
     providerReport(providerId: number): Observable<Blob> {
-        const params  = new HttpParams();
+        const params = new HttpParams();
 
-        if(providerId !== undefined){
+        if (providerId !== undefined) {
             params.set('providerId', providerId)
         }
-        return this.http.get(this.API_URL + '/provider', { 'responseType': 'blob' , params }).pipe(retry(2), catchError(this.handleError))
+        return this.http.get(this.API_URL + '/provider', { 'responseType': 'blob', params }).pipe(retry(2), catchError(this.handleError))
     }
 
     handleError(error: HttpErrorResponse) {

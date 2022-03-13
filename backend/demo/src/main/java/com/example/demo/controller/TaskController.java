@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "task")
-public class TaskController extends GenericController<Task , Long , TaskService> {
+public class TaskController extends GenericController<Task, Long, TaskService> {
 
     public TaskController(TaskService service) {
         super(service);

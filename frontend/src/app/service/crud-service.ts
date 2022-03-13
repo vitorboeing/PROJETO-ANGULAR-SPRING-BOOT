@@ -20,7 +20,7 @@ export class CrudService<T> {
         return this.http.get<T>(this.API_URL + '/' + id).pipe(retry(2), catchError(this.handleError))
     }
 
-    save(record: T): Observable<Provider> {
+    save(record: T): Observable<T> {
         return this.http.post<T>(this.API_URL, JSON.stringify(record), this.httpOptions)
             .pipe(
                 retry(2),

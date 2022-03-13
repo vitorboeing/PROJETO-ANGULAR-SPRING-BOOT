@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit {
             this.config = config;
             this.updateChartOptions();
         });
-        this.productService.getProductsSmall().then(data => this.products = data);
 
         this.items = [
             {label: 'Add New', icon: 'pi pi-fw pi-plus'},

@@ -1,3 +1,4 @@
+<p-confirmDialog  header="Sign Out" [style]="{width: '20vw'}" [baseZIndex]="10000"></p-confirmDialog>
 <div class="layout-topbar">
     <a class="layout-topbar-logo" routerLink="">
         <img src="assets/layout/images/logo.png" alt="logo" style="margin-right: 0;">
@@ -21,13 +22,18 @@
             <i class="pi pi-list"></i>
             <span>Task</span>
         </a>
-        <a href="#" class="p-link layout-topbar-button">
+        <!-- <a href="#" class="p-link layout-topbar-button">
             <i class="pi pi-cog"></i>
             <span>Settings</span>
-        </a>
+        </a> -->
         <a routerLink="/user" class="p-link layout-topbar-button">
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </a>
+        <a (click)="logout()" class="p-link layout-topbar-button">
+            <i class="pi pi-sign-out"></i>
+            <span>Sign-out</span>
+        </a>
     </div>
+
 

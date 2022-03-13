@@ -22,9 +22,9 @@ public class FeedBackController {
     private MailConfig mailConfig;
 
     @PostMapping
-    public void sendFeedBack(@RequestBody FeedBack feedBack , BindingResult bindingResult) throws ValidationException {
+    public void sendFeedBack(@RequestBody FeedBack feedBack, BindingResult bindingResult) throws ValidationException {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             throw new ValidationException("Feedback is not valid");
         }
 
