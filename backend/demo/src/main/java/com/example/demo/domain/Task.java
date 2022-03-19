@@ -43,4 +43,8 @@ public class Task {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
 
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
 }

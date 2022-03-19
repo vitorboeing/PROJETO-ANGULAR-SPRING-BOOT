@@ -14,8 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Provider implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name ="id_provider")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,13 +47,11 @@ public class Provider implements Serializable {
     @JoinColumn(name = "id_product")
     private Product product;
 
-    @Setter
     @OneToMany(
             mappedBy = "provider",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true
     )
-
     private List<Contact> contactList;
 
     public void setContactList(List<Contact> contactList) {

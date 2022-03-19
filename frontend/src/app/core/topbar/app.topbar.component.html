@@ -14,26 +14,21 @@
     </a>
 
     <div class="layout-topbar-menu" fadeInDown [ngClass]="{'layout-topbar-menu-mobile-active':appMain.topMenuActive}">
-        <a href="#" class="p-link layout-topbar-button">
-            <i class="pi pi-bell"></i>
-            <span>Calendar</span>
+        <a class="p-link layout-topbar-button" (click)="menu.toggle($event)">
+            <i class="pi pi-bell" pBadge [value]="notification"></i>
         </a>
         <a routerLink="/task/panel" class="p-link layout-topbar-button">
             <i class="pi pi-list"></i>
-            <span>Task</span>
         </a>
-        <!-- <a href="#" class="p-link layout-topbar-button">
-            <i class="pi pi-cog"></i>
-            <span>Settings</span>
-        </a> -->
         <a routerLink="/user" class="p-link layout-topbar-button">
             <i class="pi pi-user"></i>
-            <span>Profile</span>
         </a>
         <a (click)="logout()" class="p-link layout-topbar-button">
             <i class="pi pi-sign-out"></i>
-            <span>Sign-out</span>
         </a>
-    </div>
+</div>
+
+<p-menu #menu [popup]="true" [model]="items"></p-menu>
+
 
 

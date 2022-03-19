@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8be9931-5cad-4096-ae2b-348da77163a2" name="Default Changelist" comment="Melhorias" />
+    <list default="true" id="a8be9931-5cad-4096-ae2b-348da77163a2" name="Default Changelist" comment="Melhorias">
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/app.main.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/app.main.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/app.menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/app.menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/auth/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/auth/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/auth/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/auth/register/register.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/core/topbar/app.topbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/core/topbar/app.topbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/core/topbar/app.topbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/core/topbar/app.topbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/reports/provider/provider-report.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/reports/provider/provider-report.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/service/report-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/service/report-service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/service/task-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/service/task-service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/service/user-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/service/user-service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/task/task.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/task/task.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/task/task.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/task/task.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_menu.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_menu.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_responsive.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_responsive.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_topbar.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/assets/sass/layout/_topbar.scss" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -100,6 +116,19 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="projeto-pessoal" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="demo" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.demo.DemoApplication" />
@@ -274,6 +303,13 @@
       <workItem from="1645960450170" duration="1292000" />
       <workItem from="1646059154682" duration="12864000" />
       <workItem from="1647127802698" duration="2124000" />
+      <workItem from="1647185372915" duration="31000" />
+      <workItem from="1647186831911" duration="5714000" />
+      <workItem from="1647216671217" duration="153000" />
+      <workItem from="1647218526589" duration="782000" />
+      <workItem from="1647638047619" duration="1054000" />
+      <workItem from="1647641138087" duration="5237000" />
+      <workItem from="1647698839335" duration="2747000" />
     </task>
     <task id="LOCAL-00001" summary="Melhorias">
       <created>1632797017360</created>

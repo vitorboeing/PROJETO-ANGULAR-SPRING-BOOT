@@ -16,8 +16,6 @@ import java.util.Objects;
 @EqualsAndHashCode
 public class Product implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "id_product")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +34,8 @@ public class Product implements Serializable {
     )
     private List<Provider> providerList = new ArrayList<>();
 
-
-
     public void setName(String name){
         this.name = name.trim();
     }
-
 
 }

@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     password: string;
     password2: string;
     submitted: boolean;
+    apiError: boolean;
 
     config: AppConfig;
     subscription: Subscription;
@@ -47,7 +48,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
             this.submitted = true;
             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'Passwords are not the same' });
         } else {
-            this.authService.signup(userName , email, password).subscribe(() => this.router.navigate(['']));
+            this.authService.signup(userName , email, password).subscribe({
+                error : (error) =>  {
+                    this.apiError = true;
+                    this.messageService.add({ severity: 'error', summary: 'Rejected', detail: error.error.message });
+                } ,
+                complete :  () =>  this.router.navigate([''])
+            });
         }
     }
 

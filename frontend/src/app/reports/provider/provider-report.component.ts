@@ -12,9 +12,12 @@ import { ProviderService } from 'src/app/service/provider-service';
 export class ProviderReportComponent implements OnInit {
 
     providers: Provider[]
+    params : any;
     selectProvider: Provider;
 
-    constructor(private service: ReportService, private providerService: ProviderService) { }
+    constructor(private service: ReportService, private providerService: ProviderService) {
+        this.params = {}
+     }
 
     ngOnInit(): void {
         this.providerService.getAll().subscribe({
@@ -23,10 +26,16 @@ export class ProviderReportComponent implements OnInit {
     }
 
     print() {
-        this.service.providerReport(this.selectProvider?.id).subscribe({
+
+        if(this.selectProvider != undefined){
+            this.params.providerId = this.selectProvider?.id;
+        }
+
+        this.service.providerReport(this.params).subscribe({
             next: (blob) => {
                 const pdf = new Blob([blob], { type: 'application/pdf' });
                 window.open(URL.createObjectURL(pdf))
+                this.params = {}
             }
         });
     }

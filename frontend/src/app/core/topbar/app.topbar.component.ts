@@ -12,11 +12,16 @@ import { AppMainComponent } from 'src/app/app.main.component';
 export class AppTopBarComponent implements OnInit {
 
     items: MenuItem[];
-    temaDark : boolean
+    temaDark : boolean;
+    notification : number = 2;
 
     constructor(public appMain: AppMainComponent , private auth : AuthService , private confirmationService: ConfirmationService , private router : Router) { }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.items = [
+            {label: 'Dashboard',icon: 'pi pi-fw pi-home', routerLink: ['/']}
+        ]
+    }
 
     logout(){
         this.confirmationService.confirm({
@@ -27,4 +32,9 @@ export class AppTopBarComponent implements OnInit {
             }
         });
     }
+
+    ShowNotification(){
+
+    }
+
 }

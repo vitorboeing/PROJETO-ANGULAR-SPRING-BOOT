@@ -1,30 +1,30 @@
 <div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden" style="background-image: url('../../../assets/demo/background/background-login.svg'); background-size: cover">
     <p-toast></p-toast>
     <div class="grid justify-content-center p-2 lg:p-0" style="min-width:40%">
-            <div class="h-full w-full m-0 py-7 px-4" style="border-radius:25px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
+            <div class="h-full w-full m-0 py-7 px-4" style="background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
                 <div class="text-center mb-5">
                     <div class="text-900 text-3xl font-medium mb-3">Welcome !</div>
                     <span class="text-600 font-medium">Create your account</span>
                 </div>
-
+                <p-divider></p-divider>
                 <div class="w-full md:w-10 mx-auto">
                     <div class="mb-3">
                         <label for="userName" class="block text-900 text-xl font-medium mb-2">User name</label>
-                        <input id="userName" type="text" [(ngModel)]="userName" placeholder="User name" pInputText class="w-full " style="padding:1rem;">
+                        <input id="userName" type="text" [(ngModel)]="userName" placeholder="User name" pInputText class="w-full " style="padding:1rem;" [ngClass]="{'ng-invalid ng-dirty' :  apiError }">
                     </div>
                     <div class="mb-3">
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                        <input id="email1" type="email" [(ngModel)]="email" placeholder="Email address" pInputText class="w-full" style="padding:1rem;">
+                        <input id="email1" type="email" [(ngModel)]="email" placeholder="Email address" pInputText class="w-full" style="padding:1rem;" [ngClass]="{'ng-invalid ng-dirty' :  apiError }">
                     </div>
                     <div class="mb-3">
                         <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted }"></p-password>
+                        <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted || apiError }"></p-password>
                     </div>
                     <div class="mb-3">
                         <label for="password2" class="block text-900 font-medium text-xl mb-2">Confirm Password</label>
-                        <p-password id="password2" [feedback]="false" [(ngModel)]="password2" placeholder="Confirm Password" styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted }"></p-password>
+                        <p-password id="password2" [feedback]="false" [(ngModel)]="password2" placeholder="Confirm Password" styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted || apiError }"></p-password>
                     </div>
-                    <button pButton pRipple label="Sign up" class="w-full p-3 text-xl" (click)="signup(userName ,email , password , password2)" [disabled]="!isRequired"></button>
+                    <button pButton pRipple label="Sign up" class="w-full p-3 text-xl" (click)="signup(userName ,email , password , password2)" [disabled]="!isRequired" ></button>
                 </div>
                 <div class="text-center mb-5 mt-4">
                     <span class="text-600 font-medium">Have an account already?</span>

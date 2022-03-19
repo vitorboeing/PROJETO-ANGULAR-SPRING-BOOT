@@ -12,12 +12,7 @@ export class ReportService {
 
     constructor(protected http: HttpClient) { }
 
-    providerReport(providerId: number): Observable<Blob> {
-        const params = new HttpParams();
-
-        if (providerId !== undefined) {
-            params.set('providerId', providerId)
-        }
+    providerReport(params: any): Observable<Blob> {
         return this.http.get(this.API_URL + '/provider', { 'responseType': 'blob', params }).pipe(retry(2), catchError(this.handleError))
     }
 

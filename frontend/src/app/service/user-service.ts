@@ -11,6 +11,10 @@ export class UserService {
     constructor(protected http: HttpClient) {}
 
     getUser(): Observable<any> {
+        return this.http.get(this.api + '/user/info').pipe(retry(2), catchError(this.handleError))
+    }
+
+    findAll(): Observable<any> {
         return this.http.get(this.api + '/user').pipe(retry(2), catchError(this.handleError))
     }
 

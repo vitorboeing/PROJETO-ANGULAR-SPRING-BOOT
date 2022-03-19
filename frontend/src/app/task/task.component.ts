@@ -1,4 +1,5 @@
-import { Component,  OnInit } from '@angular/core';
+import { UserService } from './../service/user-service';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TaskService } from 'src/app/service/task-service';
 
@@ -14,13 +15,18 @@ export class TaskComponent implements OnInit {
 
     task: any;
     tasks: any[] = []
+    users: any[] = []
     enumSituation: any[];
     enumPriority: any[];
 
-    constructor(private service: TaskService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+
+    constructor(private service: TaskService, private messageService: MessageService, private userService: UserService) { }
 
     ngOnInit() {
         this.findAllTask()
+        this.userService.findAll().subscribe({
+            next: (res) => this.users = res
+        })
 
         this.enumSituation = [
             { label: 'ToDo', code: 'TODO', },
@@ -36,7 +42,10 @@ export class TaskComponent implements OnInit {
     }
 
     opewNewTask() {
-        this.task = {}
+        this.task = {
+            inicialDate: new Date(),
+            endDate: new Date()
+        }
         this.openDialog = true;
     }
 
@@ -67,7 +76,7 @@ export class TaskComponent implements OnInit {
     }
 
     findAllTask(): void {
-        this.service.getAll().subscribe({
+        this.service.findAllByUser().subscribe({
             next: (res) => this.tasks = res
         });
     }
