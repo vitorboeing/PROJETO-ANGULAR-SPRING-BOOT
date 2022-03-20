@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
 
-        this.taskService.getAll().subscribe({
+        this.taskService.findAllByUser().subscribe({
             next: (res) => this.tasks = res
          })
 

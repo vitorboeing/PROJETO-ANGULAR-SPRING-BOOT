@@ -144,11 +144,11 @@
             </div>
             <div class="field col-6">
                 <label for="priority">Inicial Date</label>
-                <p-calendar [(ngModel)]="task.inicialDate" appendTo="body"></p-calendar>
+                <p-calendar name="inicialDate" [(ngModel)]="task.inicialDate" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
             </div>
             <div class="field col-6">
                 <label for="priority">End Date</label>
-                <p-calendar [(ngModel)]="task.endDate" appendTo="body"></p-calendar>
+                <p-calendar [(ngModel)]="task.endDate" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
             </div>
             <div class="field col-12">
                 <label>User</label>

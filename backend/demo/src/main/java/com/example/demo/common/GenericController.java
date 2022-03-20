@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public abstract class GenericController <E, ID extends Serializable, S extends G
     }
 
     @PostMapping
-    public ResponseEntity<E> save(@RequestBody E body) {
+    public ResponseEntity<E> save(@RequestBody @Valid E body) {
         return ResponseEntity.ok(service.save(body));
     }
 

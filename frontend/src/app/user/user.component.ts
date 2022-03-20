@@ -18,7 +18,7 @@ export class UserComponent implements OnInit {
      }
 
     ngOnInit() {
-        this.service.getUser().subscribe({
+        this.service.getUserInfo().subscribe({
             next: (res) => this.user = res
         });
         this.changeThemeDark(this.user.themeDark)

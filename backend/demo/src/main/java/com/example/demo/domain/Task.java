@@ -2,15 +2,14 @@ package com.example.demo.domain;
 
 import com.example.demo.domain.enums.Priority;
 import com.example.demo.domain.enums.Situation;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @AllArgsConstructor
@@ -28,22 +27,25 @@ public class Task {
     private String name;
 
     @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Situation situation = Situation.TODO;
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Priority priority = Priority.NONE;
 
     @Setter
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate inicialDate = LocalDate.now();
+    @NotNull
+    private Date inicialDate;
 
     @Setter
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate endDate;
+    @NotNull
+    private Date endDate;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "id_user")
     private User user;
 

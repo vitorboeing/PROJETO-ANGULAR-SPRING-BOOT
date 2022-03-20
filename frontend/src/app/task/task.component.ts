@@ -55,6 +55,8 @@ export class TaskComponent implements OnInit {
 
     save() {
         this.service.save(this.task).subscribe({
+            error: (error) => { error.error.forEach(element => {this.messageService.add({ severity: 'error', summary: 'Error', detail: element, life: 3000 })});
+            },
             complete: () => {
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Task Updated', life: 3000 });
                 this.findAllTask();
@@ -69,7 +71,7 @@ export class TaskComponent implements OnInit {
             complete: () => {
                 this.openDialog = false;
                 this.deleteDialog = false;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Task Deleted', life: 3000 });
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Task Deleted' });
                 this.findAllTask()
             }
         })
@@ -83,7 +85,11 @@ export class TaskComponent implements OnInit {
 
     openTask(task: any) {
         this.service.getById(task.id).subscribe({
-            next: (res) => this.task = res
+            error: (error) => console.log(error),
+            next: (res) => {
+                this.task = res
+            }
+
         });
         this.openDialog = true;
     }

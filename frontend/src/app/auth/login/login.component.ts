@@ -1,3 +1,4 @@
+import { UserService } from './../../service/user-service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfigService } from '../../service/app.config.service';
 import { AppConfig } from '../../api/appconfig';
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     email: string;
     password: string;
+    apiError: boolean;
 
     config: AppConfig;
 
@@ -41,15 +43,21 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     error: any;
 
-    constructor(public configService: ConfigService, private authService: AuthService, private router: Router, private messageService: MessageService) {
+    constructor(public configService: ConfigService, private authService: AuthService, private router: Router, private messageService: MessageService , private userService : UserService) {
         this.email = "vitor-bh@outlook.com",
         this.password = "1234"
     }
 
     login(username: string, password: string) {
         this.authService.login(username, password).subscribe({
-            error : (error) =>  this.messageService.add({severity: 'error', summary: 'Error', detail: error}),
-            complete :  () =>  this.router.navigate([''])
+            error : (error) =>  {
+                this.apiError = true;
+                this.messageService.add({severity: 'error', summary: 'Error', detail: error.error.message})
+            },
+            complete :  () =>  {
+                this.userService.getUser();
+                this.router.navigate([''])
+            }
         })
     }
 

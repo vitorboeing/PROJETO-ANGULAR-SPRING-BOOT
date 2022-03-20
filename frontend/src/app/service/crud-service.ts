@@ -21,11 +21,7 @@ export class CrudService<T> {
     }
 
     save(record: T): Observable<T> {
-        return this.http.post<T>(this.API_URL, JSON.stringify(record), this.httpOptions)
-            .pipe(
-                retry(2),
-                catchError(this.handleError)
-            )
+        return this.http.post<T>(this.API_URL, JSON.stringify(record), this.httpOptions).pipe(retry(2))
     }
 
     update(record: any): Observable<T> {

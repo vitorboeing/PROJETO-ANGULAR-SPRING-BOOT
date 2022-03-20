@@ -61,7 +61,7 @@ public class AuthController {
             var token = jwtTokenUtil.generateToken(body.getEmail());
             return Collections.singletonMap("token", token);
         }catch (AuthenticationException authExc){
-            throw new RuntimeException("Invalid Login Credentials");
+            throw new BusinessException("Invalid Login Credentials");
         }
     }
 

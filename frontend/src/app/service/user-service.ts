@@ -1,18 +1,31 @@
+import { AppConfigComponent } from './../core/config/app.config.component';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '../api/user';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserService {
 
     api = environment.API;
 
-    constructor(protected http: HttpClient) {}
+    appCofing: AppConfigComponent
 
-    getUser(): Observable<any> {
-        return this.http.get(this.api + '/user/info').pipe(retry(2), catchError(this.handleError))
+    constructor(protected http: HttpClient, ) { }
+
+    getUser(): void {
+         this.http.get(this.api + '/user/info').pipe(retry(2), catchError(this.handleError))
+            .subscribe({
+                next: (user : User) =>  {
+                    this.appCofing.changeThemeDark(user.themeDark)
+                }
+            });
     }
+
+    getUserInfo(): Observable<any> {
+        return this.http.get(this.api + '/user/info').pipe(retry(2), catchError(this.handleError))
+   }
 
     findAll(): Observable<any> {
         return this.http.get(this.api + '/user').pipe(retry(2), catchError(this.handleError))
